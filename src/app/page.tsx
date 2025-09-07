@@ -5,6 +5,7 @@ import TypingEffect from '@/components/TypingEffect'
 import ChatInterface from '@/components/ChatInterface'
 import DraggableGlassChat from '@/components/DraggableGlassChat'
 import SlideToUnlock from '@/components/SlideToUnlock'
+import MobileExperience from '@/components/MobileExperience'
 import { getPersonalInfo, getCurrentAge, getSiteConfig } from '@/lib/data'
 
 const personalInfo = getPersonalInfo()
@@ -18,6 +19,7 @@ export default function Home() {
   const [nameTypingComplete, setNameTypingComplete] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [showCopyToast, setShowCopyToast] = useState(false)
+  const [showMobileExperience, setShowMobileExperience] = useState(false)
   const age = getCurrentAge()
 
   useEffect(() => {
@@ -58,7 +60,11 @@ export default function Home() {
   }
 
   const handleSlideUnlock = () => {
-    setShowChat(true)
+    if (isMobile) {
+      setShowMobileExperience(true)
+    } else {
+      setShowChat(true)
+    }
   }
 
   const handleEmailCopy = async () => {
@@ -104,7 +110,7 @@ export default function Home() {
                 <span className="ml-2 shimmer">
                   {isMobile ? 'press here' : 'press enter'}
                   {!isMobile && (
-                    <span className="inline-flex items-center ml-2 px-2 py-1 bg-gray-800 rounded text-xs">
+                    <span className="inline-flex items-center ml-2 px-2 py-1 rounded text-xl">
                       ⏎
                     </span>
                   )}
@@ -148,7 +154,8 @@ export default function Home() {
               <>
                 <SlideToUnlock 
                   onUnlock={handleSlideUnlock} 
-                  isVisible={!showChat}
+                  isVisible={!showChat && !showMobileExperience}
+                  isMobile={isMobile}
                 />
                 
                 {/* Social Media Links */}
@@ -196,8 +203,8 @@ export default function Home() {
         )}
       </div>
 
-      {/* Draggable Chat Interface */}
-      {showChat && (
+      {/* Draggable Chat Interface - Desktop */}
+      {showChat && !isMobile && (
         <DraggableGlassChat 
           onClose={() => setShowChat(false)}
           isExpanded={isExpanded}
@@ -205,6 +212,13 @@ export default function Home() {
         >
           <ChatInterface isExpanded={isExpanded} />
         </DraggableGlassChat>
+      )}
+
+      {/* Mobile Experience */}
+      {showMobileExperience && isMobile && (
+        <MobileExperience 
+          onClose={() => setShowMobileExperience(false)}
+        />
       )}
 
       {/* Copy Toast Notification */}

@@ -5,25 +5,31 @@ import { useState, useRef, useEffect } from 'react'
 interface SlideToUnlockProps {
   onUnlock: () => void
   isVisible?: boolean
+  isMobile?: boolean
 }
 
-export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnlockProps) {
+export default function SlideToUnlock({ onUnlock, isVisible = true, isMobile = false }: SlideToUnlockProps) {
   const [isDragging, setIsDragging] = useState(false)
   const [position, setPosition] = useState(0)
   const [isUnlocked, setIsUnlocked] = useState(false)
   const [isAnimatingOut, setIsAnimatingOut] = useState(false)
   const [currentPosition, setCurrentPosition] = useState(0)
+  const [isPressed, setIsPressed] = useState(false)
   const sliderRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const maxPosition = 250 // Container width (330) - button width (70) - padding (5*2) = 250
+  const getMaxPosition = () => {
+    if (!containerRef.current) return 250
+    const containerWidth = containerRef.current.offsetWidth
+    return containerWidth - 70 - 10 // Container width - button width (70) - padding (5*2) = maxPosition
+  }
 
   // Handle visibility changes and animations
   useEffect(() => {
     if (!isVisible && !isAnimatingOut) {
       // Start fade-out animation
       setIsAnimatingOut(true)
-      setCurrentPosition(maxPosition + 100) // Move button off-screen to the right
+      setCurrentPosition(getMaxPosition() + 100) // Move button off-screen to the right
     } else if (isVisible && isAnimatingOut) {
       // Start fade-in animation
       setIsAnimatingOut(false)
@@ -31,14 +37,15 @@ export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnl
       setPosition(0)
       setCurrentPosition(0)
     }
-  }, [isVisible, isAnimatingOut, maxPosition])
+  }, [isVisible, isAnimatingOut])
 
   useEffect(() => {
     const handleMove = (clientX: number) => {
       if (!isDragging || !containerRef.current || isAnimatingOut) return
 
       const rect = containerRef.current.getBoundingClientRect()
-      const newPosition = Math.max(0, Math.min(maxPosition, clientX - rect.left - 40))
+      const maxPos = getMaxPosition()
+      const newPosition = Math.max(0, Math.min(maxPos, clientX - rect.left - 40))
       setPosition(newPosition)
       setCurrentPosition(newPosition)
     }
@@ -55,14 +62,15 @@ export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnl
     const handleEnd = () => {
       if (isAnimatingOut) return
 
+      const maxPos = getMaxPosition()
       // More forgiving threshold - if user gets to 70% or within 50px of the end, count as unlocked
-      const unlockThreshold = Math.max(maxPosition * 0.7, maxPosition - 50)
+      const unlockThreshold = Math.max(maxPos * 0.7, maxPos - 50)
       
       if (position >= unlockThreshold) {
         setIsUnlocked(true)
         // Snap to end position for visual feedback
-        setPosition(maxPosition)
-        setCurrentPosition(maxPosition)
+        setPosition(maxPos)
+        setCurrentPosition(maxPos)
         setTimeout(() => {
           onUnlock()
         }, 300)
@@ -74,7 +82,7 @@ export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnl
       setIsDragging(false)
     }
 
-    if (isDragging) {
+    if (isDragging && !isMobile) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleEnd)
       document.addEventListener('touchmove', handleTouchMove, { passive: false })
@@ -87,7 +95,7 @@ export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnl
       document.removeEventListener('touchmove', handleTouchMove)
       document.removeEventListener('touchend', handleEnd)
     }
-  }, [isDragging, isUnlocked, onUnlock, position, maxPosition, isAnimatingOut])
+  }, [isDragging, isUnlocked, onUnlock, position, isAnimatingOut, isMobile])
 
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -96,7 +104,28 @@ export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnl
 
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault()
-    setIsDragging(true)
+    if (isMobile) {
+      handleMobilePress()
+    } else {
+      setIsDragging(true)
+    }
+  }
+
+  const handleMobilePress = () => {
+    if (isPressed || isUnlocked) return
+    
+    setIsPressed(true)
+    const maxPos = getMaxPosition()
+    
+    // Animate to end position
+    setPosition(maxPos)
+    setCurrentPosition(maxPos)
+    setIsUnlocked(true)
+    
+    // Trigger unlock after animation
+    setTimeout(() => {
+      onUnlock()
+    }, 500)
   }
 
   return (
@@ -105,7 +134,7 @@ export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnl
         ref={containerRef}
         className="relative overflow-hidden shadow-inner"
         style={{
-          width: '330px',
+          width: 'min(330px, calc(100vw - 48px))',
           height: '50px',
           background: 'linear-gradient(to bottom, #000000 50%, #232E35 100%)',
           borderRadius: '12px',
@@ -126,18 +155,18 @@ export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnl
               fontWeight: 'normal',
               paddingLeft: '60px',
               letterSpacing: '0.5px',
-              opacity: isUnlocked ? 0 : Math.max(0, 1 - (position / maxPosition)),
+              opacity: isUnlocked ? 0 : Math.max(0, 1 - (position / getMaxPosition())),
               transition: isDragging ? 'none' : 'opacity 0.3s ease-out'
             }}
           >
-            slide to unlock
+{isMobile ? 'tap to unlock' : 'slide to unlock'}
           </span>
         </div>
 
         {/* Slider button */}
         <div
           ref={sliderRef}
-          className="absolute cursor-grab active:cursor-grabbing"
+          className={`absolute ${isMobile ? 'cursor-pointer hover:scale-105' : 'cursor-grab active:cursor-grabbing'}`}
           style={{
             width: '70px',
             height: '40px',
@@ -146,10 +175,12 @@ export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnl
             background: 'linear-gradient(to bottom, #FBFBFC 30%, #A5A4A2 100%)',
             boxShadow: '0 2px 6px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.9)',
             border: '1px solid #999',
-            transition: isDragging ? 'none' : 'transform 0.5s ease-out'
+            transition: isDragging || isPressed ? 'transform 0.5s ease-out, scale 0.2s ease-out' : 'transform 0.5s ease-out, scale 0.2s ease-out',
+            scale: isPressed ? '0.95' : '1'
           }}
-          onMouseDown={handleMouseDown}
+          onMouseDown={isMobile ? undefined : handleMouseDown}
           onTouchStart={handleTouchStart}
+          onClick={isMobile ? handleMobilePress : undefined}
         >
           {/* Arrow icon */}
           <div className="w-full h-full flex items-center justify-center">
