@@ -1,0 +1,50 @@
+{
+  "site": {
+    "title": "Joaquin Bressan Nazar",
+    "description": "Co-founder and CTO passionate about building AI-driven systems and meaningful digital experiences.",
+    "url": "https://joaquinbressan.com",
+    "author": "Joaquin Bressan Nazar",
+    "logo": "/logos/JBN.svg"
+  },
+  "branding": {
+    "logo": "/logos/JBN.svg",
+    "logoAlt": "Joaquin Bressan Logo",
+    "favicon": "/favicon.ico",
+    "primaryColor": "#ffffff",
+    "backgroundColor": "#000000"
+  },
+  "features": {
+    "chatEnabled": true,
+    "slideToUnlock": true,
+    "typingEffect": true,
+    "expandableExperience": true,
+    "mentionAutocomplete": true,
+    "mobileOptimized": true
+  },
+  "ui": {
+    "typingSpeed": {
+      "name": 80,
+      "aboutText": 15
+    },
+    "delays": {
+      "initial": 500,
+      "aboutText": 200,
+      "slideToUnlock": 300
+    },
+    "animations": {
+      "enableSkip": true,
+      "allowTouchSkip": true
+    }
+  },
+  "api": {
+    "chatEndpoint": "/api/chat",
+    "model": "gpt-3.5-turbo",
+    "maxTokens": 500,
+    "temperature": 0.7,
+    "streamResponse": true
+  },
+  "development": {
+    "showDebugInfo": false,
+    "mockApiResponses": false
+  }
+}

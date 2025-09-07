@@ -1,0 +1,58 @@
+{
+  "experiences": [
+    {
+      "id": "weekn",
+      "logo": "/logos/weekn.ico",
+      "name": "Weekn",
+      "position": "Co-founder & CTO",
+      "company": "Weekn",
+      "startDate": "2023-10-01",
+      "endDate": null,
+      "years": "2023 - Present",
+      "current": true,
+      "description": "Co-founded Weekn, a platform experimenting with AI-driven social interactions and data visualization. Led technical strategy and built full-stack systems combining conversational agents, thread simulations, and interactive city visualizations for research and public engagement.",
+      "technologies": ["React", "Next.js", "TypeScript", "Node.js", "Flutter", "MySQL", "PostgreSQL", "Cloudflare", "Vercel"],
+      "highlights": [
+        "Designed and deployed large-scale thread simulation and visualization systems",
+        "Built cross-platform solutions (web, mobile) integrating AI pipelines and data analysis",
+        "Directed technical roadmap as CTO and co-founder"
+      ]
+    },
+    {
+      "id": "thetide-lab",
+      "logo": "/logos/tide.ico",
+      "name": "The Tide LAB",
+      "position": "Co-Author & Artist",
+      "company": "The Tide",
+      "startDate": "2024-10-01",
+      "endDate": null,
+      "years": "2024 - Present",
+      "current": true,
+      "description": "Contributed to The Tide LAB, presented at the 2025 Venice Biennale Architettura, exploring how AI can enable large-scale, real-time dialogue across geographies, disciplines, and generations. Built the end-to-end pipeline of a multilingual conversational AI agent with agentic retrieval-augmented generation (RAG) over a knowledge base of processed online conversations.",
+      "technologies": ["Python", "Next.js", "Node.js", "RAG", "LLMs", "AWS", "Supabase"],
+      "highlights": [
+        "Developed multilingual AI conversational pipeline from scratch in under 3 months",
+        "Integrated 80% state-of-the-art AI tools released less than six months before launch",
+        "Presented at an event with over 300,000 visitors and global media attention"
+      ]
+    },
+    {
+      "id": "datocenter",
+      "logo": "/logos/dato.ico",
+      "name": "DATOCenter",
+      "position": "Co-founder",
+      "company": "DATO",
+      "startDate": "2025-05-01",
+      "endDate": null,
+      "years": "2025 - Present",
+      "current": true,
+      "description": "Working on the vision of DATOs—Decentralized Autonomous Trustless Organizations—designed to overcome the coordination challenges of DAOs. Building governance engines powered by GenLayer’s Intelligent Contracts to achieve trustless decision-making for non-deterministic problems. Inspired by the manifesto: 'Bitcoin delivered trustless money. Ethereum delivered trustless computation. GenLayer delivers trustless decision-making. DATO will deliver trustless governance.'",
+      "technologies": ["Blockchain", "GenLayer", "Governance Engines", "Intelligent Contracts"],
+      "highlights": [
+        "Shaped early-stage governance standards for decentralized autonomous organizations",
+        "Explored frameworks for adaptive, transparent, and accountable decision-making",
+        "Contributed to the development of DATO as a future of credibly neutral governance"
+      ]
+    }
+  ]
+}

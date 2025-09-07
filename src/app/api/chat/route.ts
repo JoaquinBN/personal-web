@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getPersonalInfo, getCurrentAge, getSiteConfig } from '@/lib/data'
+import { getLLMPrompt } from '@/lib/server-data'
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,6 +23,8 @@ export async function POST(request: NextRequest) {
       })
     }
 
+    const config = getSiteConfig()
+    
     // Make request to OpenAI API
     const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -29,27 +33,20 @@ export async function POST(request: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: config.api.model,
         messages: [
           {
             role: 'system',
-            content: `You are Joaquin Bressan, a ${new Date().getFullYear() - 2001} year old software developer. You are passionate about creating meaningful digital experiences and specialize in full-stack development with modern web technologies like React, Next.js, and TypeScript.
-
-Your experience includes:
-- TechCorp Platform (2022-2024): Senior Full-Stack Developer - Led development of scalable microservices platform serving 100k+ users
-- InnovateAI (2021-2022): Frontend Lead - Spearheaded frontend architecture for AI-powered analytics dashboard
-- StartupXYZ (2019-2021): Co-founder & CTO - Built technical foundation for fintech startup, scaled to handle millions of transactions
-
-Respond as Joaquin in a conversational, friendly, and professional manner. Share insights about your work, experiences, and interests. Keep responses concise but informative. If asked about specific projects mentioned with @ProjectName, provide detailed insights about that experience.`
+            content: getLLMPrompt()
           },
           {
             role: 'user',
             content: message
           }
         ],
-        stream: true,
-        temperature: 0.7,
-        max_tokens: 500,
+        stream: config.api.streamResponse,
+        temperature: config.api.temperature,
+        max_tokens: config.api.maxTokens,
       }),
     })
 

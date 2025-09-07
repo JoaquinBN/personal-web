@@ -1,0 +1,38 @@
+{
+  "name": "Joaquin Bressan Nazar",
+  "firstName": "Joaquin",
+  "lastName": "Bressan Nazar",
+  "birthday": "2001-08-01",
+  "age": {
+    "calculate": true,
+    "birthDate": "2001-08-01"
+  },
+  "title": "Co-Founder & CTO @ Weekn",
+  "aboutText": "I'm a software developer and entrepreneur passionate about creating meaningful digital experiences through cutting-edge technology. As Co-Founder & CTO of Weekn, I specialize in building AI pipelines, full-stack systems, and interactive platforms. My experience includes leading the development of multilingual conversational AI agents presented at the 2025 Venice Biennale Architettura, rapid prototyping of state-of-the-art AI integrations, and delivering scalable products under tight deadlines.\n\nI believe in the power of AI and technology not just to solve problems, but to create new ways of connecting people, ideas, and disciplines. My work spans software development, data engineering, and cross-disciplinary collaboration between technology, research, and art.",
+  "skills": [
+    "Python",
+    "AI & Machine Learning",
+    "Large Language Models (LLMs)",
+    "Retrieval-Augmented Generation (RAG)",
+    "Conversational AI",
+    "Full-stack Development",
+    "Next.js",
+    "Node.js",
+    "React",
+    "Mobile Development (Flutter, iOS/Android)",
+    "Database Systems (MySQL, PostgreSQL, Supabase)",
+    "Cloud Infrastructure (AWS, Cloudflare, Vercel)",
+    "Data Engineering & Visualization",
+    "Computer Vision & Data Annotation",
+    "Startup Leadership",
+    "Technical Project Management"
+  ],
+  "contact": {
+    "email": "joaquinbressan@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/joaquin-bressan",
+    "github": "https://github.com/JoaquinBN",
+    "twitter": "https://twitter.com/joaquinbressann",
+    "instagram": "https://www.instagram.com/joaquinbressan",
+    "website": "joaquinbressan.com"
+  }
+}

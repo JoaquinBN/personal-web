@@ -5,26 +5,10 @@ import TypingEffect from '@/components/TypingEffect'
 import ChatInterface from '@/components/ChatInterface'
 import DraggableGlassChat from '@/components/DraggableGlassChat'
 import SlideToUnlock from '@/components/SlideToUnlock'
+import { getPersonalInfo, getCurrentAge, getSiteConfig } from '@/lib/data'
 
-// Calculate age from birth date (August 1, 2001)
-function calculateAge() {
-  const birthDate = new Date(2001, 7, 1) // Month is 0-indexed, so 7 = August
-  const today = new Date()
-  let age = today.getFullYear() - birthDate.getFullYear()
-  const monthDiff = today.getMonth() - birthDate.getMonth()
-  
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-    age--
-  }
-  
-  return age
-}
-
-const aboutText = `I'm a passionate software developer who loves creating meaningful digital experiences. I specialize in full-stack development with modern web technologies like React, Next.js, and TypeScript.
-
-I believe in building products that solve real problems and delight users. My experience spans from co-founding a fintech startup to leading frontend architecture at AI-powered platforms.
-
-When I'm not coding, you'll find me exploring new technologies, contributing to open source, or enjoying a good cup of coffee while planning the next big project.`
+const personalInfo = getPersonalInfo()
+const config = getSiteConfig()
 
 export default function Home() {
   const [started, setStarted] = useState(false)
@@ -33,7 +17,7 @@ export default function Home() {
   const [isExpanded, setIsExpanded] = useState(false)
   const [nameTypingComplete, setNameTypingComplete] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const age = calculateAge()
+  const age = getCurrentAge()
 
   useEffect(() => {
     const checkMobile = () => {
@@ -84,9 +68,9 @@ export default function Home() {
           <div className="flex flex-col items-center justify-center min-h-screen">
             <h1 className="text-2xl md:text-3xl font-bold text-white mb-4">
               <TypingEffect 
-                text={`Joaquin Bressan, ${age}`}
-                speed={80}
-                delay={500}
+                text={`${personalInfo.name}, ${age}`}
+                speed={config.ui.typingSpeed.name}
+                delay={config.ui.delays.initial}
                 onComplete={handleNameTypingComplete}
               />
             </h1>
@@ -111,7 +95,7 @@ export default function Home() {
           <div className="pt-16">
             {/* Fixed name/age at top */}
             <h1 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">
-              Joaquin Bressan, {age}
+              {personalInfo.name}, {age}
             </h1>
             
             {/* About text flows from top to bottom */}
@@ -119,12 +103,12 @@ export default function Home() {
               <span className="text-white">{'>'}</span>
               <span className="ml-2">
                 <TypingEffect 
-                  text={aboutText}
-                  speed={15}
-                  delay={200}
+                  text={personalInfo.aboutText}
+                  speed={config.ui.typingSpeed.aboutText}
+                  delay={config.ui.delays.aboutText}
                   onComplete={handleTypingComplete}
-                  allowSkip={true}
-                  allowTouchSkip={isMobile}
+                  allowSkip={config.ui.animations.enableSkip}
+                  allowTouchSkip={isMobile && config.ui.animations.allowTouchSkip}
                 />
               </span>
             </div>

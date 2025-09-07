@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import TypingEffect from './TypingEffect'
+import { getExperiences, getSiteConfig, type Experience } from '@/lib/data'
 
 interface Message {
   id: number
@@ -10,41 +11,8 @@ interface Message {
   isTyping?: boolean
 }
 
-interface Project {
-  id: string
-  logo: string
-  name: string
-  position: string
-  years: string
-  description: string
-}
-
-const projects: Project[] = [
-  {
-    id: '1',
-    logo: '🚀',
-    name: 'TechCorp Platform',
-    position: 'Senior Full-Stack Developer',
-    years: '2022 - 2024',
-    description: 'Led the development of a scalable microservices platform serving 100k+ users. Built with React, Node.js, and AWS, focusing on performance optimization and user experience.'
-  },
-  {
-    id: '2',
-    logo: '💡',
-    name: 'InnovateAI',
-    position: 'Frontend Lead',
-    years: '2021 - 2022',
-    description: 'Spearheaded the frontend architecture for an AI-powered analytics dashboard. Implemented real-time data visualization and created a design system used across multiple products.'
-  },
-  {
-    id: '3',
-    logo: '🌟',
-    name: 'StartupXYZ',
-    position: 'Co-founder & CTO',
-    years: '2019 - 2021',
-    description: 'Co-founded and built the technical foundation for a fintech startup. Developed the MVP, managed a team of 5 developers, and scaled the platform to handle millions of transactions.'
-  }
-]
+const experiences = getExperiences()
+const config = getSiteConfig()
 
 interface ChatInterfaceProps {
   onFirstMessage?: () => void
@@ -122,8 +90,8 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
     }
   }
 
-  const filteredProjects = projects.filter(project =>
-    project.name.toLowerCase().includes(mentionFilter.toLowerCase())
+  const filteredExperiences = experiences.filter(experience =>
+    experience.name.toLowerCase().includes(mentionFilter.toLowerCase())
   )
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -240,14 +208,14 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
   }
 
   const nextProject = () => {
-    setCurrentProjectIndex((prev) => (prev + 1) % projects.length)
+    setCurrentProjectIndex((prev) => (prev + 1) % experiences.length)
   }
 
   const prevProject = () => {
-    setCurrentProjectIndex((prev) => (prev - 1 + projects.length) % projects.length)
+    setCurrentProjectIndex((prev) => (prev - 1 + experiences.length) % experiences.length)
   }
 
-  const currentProject = projects[currentProjectIndex]
+  const currentProject = experiences[currentProjectIndex]
 
   return (
     <div className="flex flex-col h-full">
@@ -287,20 +255,24 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
           {/* Input Area */}
           <div className="relative">
             {showMentions && (
-              <div className="absolute bottom-full left-0 right-0 mb-2 bg-gray-900 border border-gray-700 rounded-lg shadow-lg max-h-40 overflow-y-auto z-10">
-                {filteredProjects.map((project) => (
-                  <button
-                    key={project.id}
-                    onClick={() => insertMention(project.name)}
-                    className="w-full px-4 py-2 text-left hover:bg-gray-800 flex items-center space-x-3 text-sm"
-                  >
-                    <span className="text-lg">{project.logo}</span>
-                    <div>
-                      <div className="text-white">{project.name}</div>
-                      <div className="text-gray-400 text-xs">{project.position}</div>
-                    </div>
-                  </button>
-                ))}
+            <div className="absolute bottom-full left-0 right-0 mb-2 bg-gray-900 border border-gray-700 rounded-lg shadow-lg max-h-40 overflow-y-auto z-10">
+              {filteredExperiences.map((experience) => (
+                <button
+                  key={experience.id}
+                  onClick={() => insertMention(experience.name)}
+                  className="w-full px-4 py-2 text-left hover:bg-gray-800 flex items-center space-x-3 text-sm"
+                >
+                  <img 
+                    src={experience.logo} 
+                    alt={`${experience.name} logo`}
+                    className="w-5 h-5 object-contain"
+                  />
+                  <div>
+                    <div className="text-white">{experience.name}</div>
+                    <div className="text-gray-400 text-xs">{experience.position}</div>
+                  </div>
+                </button>
+              ))}
               </div>
             )}
             
@@ -336,7 +308,11 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
               {/* Single Project Display */}
               <div className="flex-1 flex flex-col min-h-0">
                 <div className="flex items-start space-x-3 mb-3">
-                  <span className="text-xl">{currentProject.logo}</span>
+                  <img 
+                    src={currentProject.logo} 
+                    alt={`${currentProject.name} logo`}
+                    className="w-8 h-8 object-contain flex-shrink-0"
+                  />
                   <div className="flex-1 min-w-0">
                     <h4 className="text-white font-medium text-sm">{currentProject.name}</h4>
                     <p className="text-gray-400 text-xs">{currentProject.position}</p>
@@ -361,7 +337,7 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
                 </button>
                 
                 <span className="text-gray-600 text-xs font-mono">
-                  {currentProjectIndex + 1}/{projects.length}
+                  {currentProjectIndex + 1}/{experiences.length}
                 </span>
                 
                 <button 
