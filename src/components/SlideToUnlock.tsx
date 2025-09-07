@@ -34,16 +34,25 @@ export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnl
   }, [isVisible, isAnimatingOut, maxPosition])
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMove = (clientX: number) => {
       if (!isDragging || !containerRef.current || isAnimatingOut) return
 
       const rect = containerRef.current.getBoundingClientRect()
-      const newPosition = Math.max(0, Math.min(maxPosition, e.clientX - rect.left - 40))
+      const newPosition = Math.max(0, Math.min(maxPosition, clientX - rect.left - 40))
       setPosition(newPosition)
       setCurrentPosition(newPosition)
     }
 
-    const handleMouseUp = () => {
+    const handleMouseMove = (e: MouseEvent) => {
+      handleMove(e.clientX)
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault()
+      handleMove(e.touches[0].clientX)
+    }
+
+    const handleEnd = () => {
       if (isAnimatingOut) return
 
       // More forgiving threshold - if user gets to 70% or within 50px of the end, count as unlocked
@@ -67,16 +76,25 @@ export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnl
 
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove)
-      document.addEventListener('mouseup', handleMouseUp)
+      document.addEventListener('mouseup', handleEnd)
+      document.addEventListener('touchmove', handleTouchMove, { passive: false })
+      document.addEventListener('touchend', handleEnd)
     }
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('mouseup', handleEnd)
+      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('touchend', handleEnd)
     }
   }, [isDragging, isUnlocked, onUnlock, position, maxPosition, isAnimatingOut])
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault()
     setIsDragging(true)
   }
@@ -131,6 +149,7 @@ export default function SlideToUnlock({ onUnlock, isVisible = true }: SlideToUnl
             transition: isDragging ? 'none' : 'transform 0.5s ease-out'
           }}
           onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
         >
           {/* Arrow icon */}
           <div className="w-full h-full flex items-center justify-center">
