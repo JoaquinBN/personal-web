@@ -115,10 +115,52 @@ export default function Home() {
             
             {/* Slide to unlock */}
             {showSlideToUnlock && (
-              <SlideToUnlock 
-                onUnlock={handleSlideUnlock} 
-                isVisible={!showChat}
-              />
+              <>
+                <SlideToUnlock 
+                  onUnlock={handleSlideUnlock} 
+                  isVisible={!showChat}
+                />
+                
+                {/* Social Media Links */}
+                <div className="mt-8 flex justify-center items-center space-x-6">
+                  <a 
+                    href={personalInfo.contact.github} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-white transition-colors"
+                    aria-label="GitHub"
+                  >
+                    <img src="/logos/github.svg" alt="GitHub" className="w-6 h-6" />
+                  </a>
+                  <a 
+                    href={personalInfo.contact.instagram} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-white transition-colors"
+                    aria-label="Instagram"
+                  >
+                    <img src="/logos/instagram.svg" alt="Instagram" className="w-6 h-6" />
+                  </a>
+                  <a 
+                    href={personalInfo.contact.linkedin} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-white transition-colors"
+                    aria-label="LinkedIn"
+                  >
+                    <img src="/logos/linkedin.svg" alt="LinkedIn" className="w-6 h-6" />
+                  </a>
+                  <a 
+                    href={personalInfo.contact.twitter} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-white transition-colors"
+                    aria-label="Twitter"
+                  >
+                    <img src="/logos/twitter.svg" alt="Twitter" className="w-6 h-6" />
+                  </a>
+                </div>
+              </>
             )}
           </div>
         )}

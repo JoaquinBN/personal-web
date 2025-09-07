@@ -14,13 +14,14 @@ export interface PersonalInfo {
     birthDate: string
   }
   title: string
-  shortDescription: string
   aboutText: string
   skills: string[]
   contact: {
     email: string
     linkedin: string
     github: string
+    twitter: string
+    instagram: string
     website: string
   }
 }
@@ -32,7 +33,7 @@ export interface Experience {
   position: string
   company: string
   startDate: string
-  endDate: string
+  endDate: string | null
   years: string
   current: boolean
   description: string
