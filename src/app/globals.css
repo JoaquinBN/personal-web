@@ -269,3 +269,19 @@ input:focus {
   animation: slide-shimmer 2.5s infinite linear;
   color: #999; /* Fallback for browsers that don't support background-clip: text */
 }
+
+/* Toast Animation */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}

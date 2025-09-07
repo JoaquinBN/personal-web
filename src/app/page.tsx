@@ -17,6 +17,7 @@ export default function Home() {
   const [isExpanded, setIsExpanded] = useState(false)
   const [nameTypingComplete, setNameTypingComplete] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [showCopyToast, setShowCopyToast] = useState(false)
   const age = getCurrentAge()
 
   useEffect(() => {
@@ -60,20 +61,40 @@ export default function Home() {
     setShowChat(true)
   }
 
+  const handleEmailCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(personalInfo.contact.email)
+      setShowCopyToast(true)
+      setTimeout(() => {
+        setShowCopyToast(false)
+      }, 3000)
+    } catch (err) {
+      console.error('Failed to copy email:', err)
+    }
+  }
+
   return (
     <main className="min-h-screen px-6">
       <div className="max-w-lg w-full mx-auto">
         {!started ? (
           /* Initial view - Just name, age and press enter */
           <div className="flex flex-col items-center justify-center min-h-screen">
-            <h1 className="text-lg md:text-3xl font-bold text-white mb-4">
-              <TypingEffect 
-                text={`${personalInfo.name}, ${age}`}
-                speed={config.ui.typingSpeed.name}
-                delay={config.ui.delays.initial}
-                onComplete={handleNameTypingComplete}
-              />
-            </h1>
+            <div className="mb-4">
+              <h1 className="text-lg md:text-3xl font-bold text-white mb-2">
+                <TypingEffect 
+                  text={`${personalInfo.name}, ${age}`}
+                  speed={config.ui.typingSpeed.name}
+                  delay={config.ui.delays.initial}
+                  onComplete={handleNameTypingComplete}
+                />
+              </h1>
+              <p 
+                onClick={handleEmailCopy}
+                className="text-sm md:text-base text-gray-400 hover:text-gray-300 transition-colors cursor-pointer"
+              >
+                {personalInfo.contact.email}
+              </p>
+            </div>
             {nameTypingComplete && (
               <div 
                 className="text-sm md:text-base text-gray-400 leading-relaxed cursor-pointer"
@@ -94,9 +115,17 @@ export default function Home() {
         ) : (
           <div className="pt-16">
             {/* Fixed name/age at top */}
-            <h1 className="text-lg md:text-3xl font-bold text-white mb-6 md:mb-8 text-center">
-              {personalInfo.name}, {age}
-            </h1>
+            <div className="text-center mb-6 md:mb-8">
+              <h1 className="text-lg md:text-3xl font-bold text-white mb-2">
+                {personalInfo.name}, {age}
+              </h1>
+              <p 
+                onClick={handleEmailCopy}
+                className="text-sm md:text-base text-gray-400 hover:text-gray-300 transition-colors cursor-pointer"
+              >
+                {personalInfo.contact.email}
+              </p>
+            </div>
             
             {/* About text flows from top to bottom */}
             <div className="text-xs md:text-base text-gray-200 leading-relaxed whitespace-pre-line mb-6 md:mb-8">
@@ -176,6 +205,20 @@ export default function Home() {
         >
           <ChatInterface isExpanded={isExpanded} />
         </DraggableGlassChat>
+      )}
+
+      {/* Copy Toast Notification */}
+      {showCopyToast && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in">
+          <div className="bg-black/20 backdrop-blur-md border border-white/10 rounded-lg px-4 py-3 shadow-lg">
+            <div className="flex items-center space-x-2">
+              <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span className="text-sm text-white font-medium">Copied</span>
+            </div>
+          </div>
+        </div>
       )}
     </main>
   )
