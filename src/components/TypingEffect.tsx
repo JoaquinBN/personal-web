@@ -54,7 +54,7 @@ export default function TypingEffect({
         onComplete()
       }
     }
-  }, [isSkipped, started, currentIndex, text.length, text, onComplete])
+  }, [isSkipped, started, currentIndex, text, onComplete])
 
   const handleTouchSkip = () => {
     if (allowTouchSkip) {

@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import TypingEffect from '@/components/TypingEffect'
 import ChatInterface from '@/components/ChatInterface'
 import DraggableGlassChat from '@/components/DraggableGlassChat'
@@ -32,11 +33,11 @@ export default function Home() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  const handleKeyPress = (e: KeyboardEvent) => {
+  const handleKeyPress = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Enter' && !started) {
       setStarted(true)
     }
-  }
+  }, [started])
 
   const handleClick = () => {
     if (!started && isMobile) {
@@ -47,7 +48,7 @@ export default function Home() {
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [started])
+  }, [started, handleKeyPress])
 
   const handleNameTypingComplete = () => {
     setNameTypingComplete(true)
@@ -108,7 +109,7 @@ export default function Home() {
               >
                 <span className="text-white">{'>'}</span>
                 <span className="ml-2 shimmer">
-                  {isMobile ? 'press here' : 'press enter'}
+                  {isMobile ? 'press here' : 'press enter'} 
                   {!isMobile && (
                     <span className="inline-flex items-center ml-2 px-2 py-1 rounded text-xl">
                       ⏎
@@ -167,7 +168,7 @@ export default function Home() {
                     className="text-gray-400 hover:text-white transition-colors"
                     aria-label="GitHub"
                   >
-                    <img src="/logos/github.svg" alt="GitHub" className="w-6 h-6 md:w-7 md:h-7" />
+                    <Image src="/logos/github.svg" alt="GitHub" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                   <a 
                     href={personalInfo.contact.instagram} 
@@ -176,7 +177,7 @@ export default function Home() {
                     className="text-gray-400 hover:text-white transition-colors"
                     aria-label="Instagram"
                   >
-                    <img src="/logos/instagram.svg" alt="Instagram" className="w-6 h-6 md:w-7 md:h-7" />
+                    <Image src="/logos/instagram.svg" alt="Instagram" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                   <a 
                     href={personalInfo.contact.linkedin} 
@@ -185,7 +186,7 @@ export default function Home() {
                     className="text-gray-400 hover:text-white transition-colors"
                     aria-label="LinkedIn"
                   >
-                    <img src="/logos/linkedin.svg" alt="LinkedIn" className="w-6 h-6 md:w-7 md:h-7" />
+                    <Image src="/logos/linkedin.svg" alt="LinkedIn" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                   <a 
                     href={personalInfo.contact.twitter} 
@@ -194,7 +195,7 @@ export default function Home() {
                     className="text-gray-400 hover:text-white transition-colors"
                     aria-label="Twitter"
                   >
-                    <img src="/logos/twitter.svg" alt="Twitter" className="w-6 h-6 md:w-7 md:h-7" />
+                    <Image src="/logos/twitter.svg" alt="Twitter" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                 </div>
               </>

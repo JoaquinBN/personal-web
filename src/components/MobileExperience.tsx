@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { getExperiences, getPersonalInfo, type Experience } from '@/lib/data'
 
 interface MobileExperienceProps {
@@ -67,9 +68,11 @@ export default function MobileExperience({ onClose }: MobileExperienceProps) {
         <div className="flex-1 flex flex-col p-4">
           {/* Project header */}
           <div className="flex items-start space-x-3 mb-4">
-            <img 
+            <Image 
               src={currentProject.logo} 
               alt={`${currentProject.name} logo`}
+              width={48}
+              height={48}
               className="w-12 h-12 object-contain flex-shrink-0"
             />
             <div className="flex-1 min-w-0">
@@ -120,7 +123,7 @@ export default function MobileExperience({ onClose }: MobileExperienceProps) {
               className="text-gray-400 hover:text-white transition-colors"
               aria-label="GitHub"
             >
-              <img src="/logos/github.svg" alt="GitHub" className="w-6 h-6" />
+              <Image src="/logos/github.svg" alt="GitHub" width={24} height={24} className="w-6 h-6" />
             </a>
             <a 
               href={personalInfo.contact.instagram} 
@@ -129,7 +132,7 @@ export default function MobileExperience({ onClose }: MobileExperienceProps) {
               className="text-gray-400 hover:text-white transition-colors"
               aria-label="Instagram"
             >
-              <img src="/logos/instagram.svg" alt="Instagram" className="w-6 h-6" />
+              <Image src="/logos/instagram.svg" alt="Instagram" width={24} height={24} className="w-6 h-6" />
             </a>
             <a 
               href={personalInfo.contact.linkedin} 
@@ -138,7 +141,7 @@ export default function MobileExperience({ onClose }: MobileExperienceProps) {
               className="text-gray-400 hover:text-white transition-colors"
               aria-label="LinkedIn"
             >
-              <img src="/logos/linkedin.svg" alt="LinkedIn" className="w-6 h-6" />
+              <Image src="/logos/linkedin.svg" alt="LinkedIn" width={24} height={24} className="w-6 h-6" />
             </a>
             <a 
               href={personalInfo.contact.twitter} 
@@ -147,7 +150,7 @@ export default function MobileExperience({ onClose }: MobileExperienceProps) {
               className="text-gray-400 hover:text-white transition-colors"
               aria-label="Twitter"
             >
-              <img src="/logos/twitter.svg" alt="Twitter" className="w-6 h-6" />
+              <Image src="/logos/twitter.svg" alt="Twitter" width={24} height={24} className="w-6 h-6" />
             </a>
           </div>
         </div>

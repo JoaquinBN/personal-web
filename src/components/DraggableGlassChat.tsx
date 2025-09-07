@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, ReactNode } from 'react'
+import { useState, useRef, useEffect, useCallback, ReactNode } from 'react'
 
 interface DraggableGlassChatProps {
   children: ReactNode
@@ -65,7 +65,7 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
     }
   }
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (isDragging && !isAnimating) {
       e.preventDefault()
       
@@ -90,7 +90,7 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
         setPosition(constrainedPosition)
       })
     }
-  }
+  }, [isDragging, isAnimating, dragStart.x, dragStart.y])
 
   const handleMouseUp = () => {
     setIsDragging(false)
@@ -115,7 +115,7 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
     })
   }
 
-  const handleMouseMoveResize = (e: MouseEvent) => {
+  const handleMouseMoveResize = useCallback((e: MouseEvent) => {
     if (isResizing && !isAnimating) {
       e.preventDefault()
       
@@ -136,7 +136,7 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
         setSize(newSize)
       })
     }
-  }
+  }, [isResizing, isAnimating, resizeStart.x, resizeStart.y, resizeStart.width, resizeStart.height, position.x, position.y])
 
   const handleMaximize = () => {
     setIsAnimating(true)
@@ -177,7 +177,7 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
         document.body.style.userSelect = ''
       }
     }
-  }, [isDragging, dragStart, position])
+  }, [isDragging, handleMouseMove])
 
   useEffect(() => {
     if (isResizing) {
@@ -193,7 +193,7 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
         document.body.style.userSelect = ''
       }
     }
-  }, [isResizing, resizeStart])
+  }, [isResizing, handleMouseMoveResize])
 
   return (
     <div

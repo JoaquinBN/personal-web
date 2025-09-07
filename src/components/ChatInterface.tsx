@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import TypingEffect from './TypingEffect'
 import { getExperiences, getSiteConfig, type Experience } from '@/lib/data'
 
@@ -262,9 +263,11 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
                   onClick={() => insertMention(experience.name)}
                   className="w-full px-4 py-2 text-left hover:bg-gray-800 flex items-center space-x-3 text-sm"
                 >
-                  <img 
+                  <Image 
                     src={experience.logo} 
                     alt={`${experience.name} logo`}
+                    width={20}
+                    height={20}
                     className="w-5 h-5 object-contain"
                   />
                   <div>
@@ -308,9 +311,11 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
               {/* Single Project Display */}
               <div className="flex-1 flex flex-col min-h-0">
                 <div className="flex items-start space-x-3 mb-3">
-                  <img 
+                  <Image 
                     src={currentProject.logo} 
                     alt={`${currentProject.name} logo`}
+                    width={32}
+                    height={32}
                     className="w-8 h-8 object-contain flex-shrink-0"
                   />
                   <div className="flex-1 min-w-0">

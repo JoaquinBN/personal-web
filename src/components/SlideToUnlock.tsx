@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 
 interface SlideToUnlockProps {
   onUnlock: () => void
@@ -34,6 +35,7 @@ export default function SlideToUnlock({ onUnlock, isVisible = true, isMobile = f
       // Start fade-in animation
       setIsAnimatingOut(false)
       setIsUnlocked(false)
+      setIsPressed(false)
       setPosition(0)
       setCurrentPosition(0)
     }
@@ -112,7 +114,7 @@ export default function SlideToUnlock({ onUnlock, isVisible = true, isMobile = f
   }
 
   const handleMobilePress = () => {
-    if (isPressed || isUnlocked) return
+    if (isPressed || isUnlocked || isAnimatingOut) return
     
     setIsPressed(true)
     const maxPos = getMaxPosition()
@@ -125,6 +127,13 @@ export default function SlideToUnlock({ onUnlock, isVisible = true, isMobile = f
     // Trigger unlock after animation
     setTimeout(() => {
       onUnlock()
+      // Reset states after unlock to allow future taps
+      setTimeout(() => {
+        setIsPressed(false)
+        setIsUnlocked(false)
+        setPosition(0)
+        setCurrentPosition(0)
+      }, 100)
     }, 500)
   }
 
@@ -184,11 +193,11 @@ export default function SlideToUnlock({ onUnlock, isVisible = true, isMobile = f
         >
           {/* Arrow icon */}
           <div className="w-full h-full flex items-center justify-center">
-            <img 
+            <Image 
               src="/arrow.svg" 
               alt="Arrow" 
-              width="30" 
-              height="30"
+              width={30} 
+              height={30}
               style={{ opacity: 0.7 }}
             />
           </div>
