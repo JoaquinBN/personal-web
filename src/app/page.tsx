@@ -87,20 +87,26 @@ export default function Home() {
           /* Initial view - Just name, age and press enter */
           <div className="flex flex-col items-center justify-center min-h-screen">
             <div className="mb-4">
-              <h1 className="text-lg md:text-3xl font-bold text-white mb-2">
+              <div className="text-lg md:text-3xl font-bold text-white mb-2">
                 <TypingEffect 
                   text={`${personalInfo.name}, ${age}`}
                   speed={config.ui.typingSpeed.name}
                   delay={config.ui.delays.initial}
                   onComplete={handleNameTypingComplete}
                 />
-              </h1>
-              <p 
-                onClick={handleEmailCopy}
-                className="text-sm md:text-base text-gray-400 hover:text-gray-300 transition-colors cursor-pointer"
-              >
-                {personalInfo.contact.email}
-              </p>
+              </div>
+              {nameTypingComplete && (
+                <div 
+                  className="text-sm md:text-base text-gray-400 hover:text-gray-300 transition-colors cursor-pointer"
+                  onClick={handleEmailCopy}
+                >
+                  <TypingEffect 
+                    text={personalInfo.contact.email}
+                    speed={config.ui.typingSpeed.name}
+                    delay={200}
+                  />
+                </div>
+              )}
             </div>
             {nameTypingComplete && (
               <div 
@@ -121,17 +127,17 @@ export default function Home() {
           </div>
         ) : (
           <div className="pt-16">
-            {/* Fixed name/age at top */}
+            {/* Fixed name/age/email at top */}
             <div className="text-center mb-6 md:mb-8">
               <h1 className="text-lg md:text-3xl font-bold text-white mb-2">
                 {personalInfo.name}, {age}
               </h1>
-              <p 
-                onClick={handleEmailCopy}
+              <div 
                 className="text-sm md:text-base text-gray-400 hover:text-gray-300 transition-colors cursor-pointer"
+                onClick={handleEmailCopy}
               >
                 {personalInfo.contact.email}
-              </p>
+              </div>
             </div>
             
             {/* About text flows from top to bottom */}
