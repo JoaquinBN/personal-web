@@ -66,7 +66,7 @@ export default function Home() {
         {!started ? (
           /* Initial view - Just name, age and press enter */
           <div className="flex flex-col items-center justify-center min-h-screen">
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-4">
+            <h1 className="text-lg md:text-3xl font-bold text-white mb-4">
               <TypingEffect 
                 text={`${personalInfo.name}, ${age}`}
                 speed={config.ui.typingSpeed.name}
@@ -76,7 +76,7 @@ export default function Home() {
             </h1>
             {nameTypingComplete && (
               <div 
-                className="text-gray-400 leading-relaxed cursor-pointer"
+                className="text-sm md:text-base text-gray-400 leading-relaxed cursor-pointer"
                 onClick={handleClick}
               >
                 <span className="text-white">{'>'}</span>
@@ -94,12 +94,12 @@ export default function Home() {
         ) : (
           <div className="pt-16">
             {/* Fixed name/age at top */}
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">
+            <h1 className="text-lg md:text-3xl font-bold text-white mb-6 md:mb-8 text-center">
               {personalInfo.name}, {age}
             </h1>
             
             {/* About text flows from top to bottom */}
-            <div className="text-gray-200 leading-relaxed whitespace-pre-line mb-8">
+            <div className="text-xs md:text-base text-gray-200 leading-relaxed whitespace-pre-line mb-6 md:mb-8">
               <span className="text-white">{'>'}</span>
               <span className="ml-2">
                 <TypingEffect 
@@ -109,6 +109,7 @@ export default function Home() {
                   onComplete={handleTypingComplete}
                   allowSkip={config.ui.animations.enableSkip}
                   allowTouchSkip={isMobile && config.ui.animations.allowTouchSkip}
+                  enableMarkdown={true}
                 />
               </span>
             </div>
@@ -122,7 +123,7 @@ export default function Home() {
                 />
                 
                 {/* Social Media Links */}
-                <div className="mt-8 flex justify-center items-center space-x-6">
+                <div className="mt-6 md:mt-8 flex justify-center items-center space-x-4 md:space-x-6">
                   <a 
                     href={personalInfo.contact.github} 
                     target="_blank" 
@@ -130,7 +131,7 @@ export default function Home() {
                     className="text-gray-400 hover:text-white transition-colors"
                     aria-label="GitHub"
                   >
-                    <img src="/logos/github.svg" alt="GitHub" className="w-6 h-6" />
+                    <img src="/logos/github.svg" alt="GitHub" className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                   <a 
                     href={personalInfo.contact.instagram} 
@@ -139,7 +140,7 @@ export default function Home() {
                     className="text-gray-400 hover:text-white transition-colors"
                     aria-label="Instagram"
                   >
-                    <img src="/logos/instagram.svg" alt="Instagram" className="w-6 h-6" />
+                    <img src="/logos/instagram.svg" alt="Instagram" className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                   <a 
                     href={personalInfo.contact.linkedin} 
@@ -148,7 +149,7 @@ export default function Home() {
                     className="text-gray-400 hover:text-white transition-colors"
                     aria-label="LinkedIn"
                   >
-                    <img src="/logos/linkedin.svg" alt="LinkedIn" className="w-6 h-6" />
+                    <img src="/logos/linkedin.svg" alt="LinkedIn" className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                   <a 
                     href={personalInfo.contact.twitter} 
@@ -157,7 +158,7 @@ export default function Home() {
                     className="text-gray-400 hover:text-white transition-colors"
                     aria-label="Twitter"
                   >
-                    <img src="/logos/twitter.svg" alt="Twitter" className="w-6 h-6" />
+                    <img src="/logos/twitter.svg" alt="Twitter" className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                 </div>
               </>

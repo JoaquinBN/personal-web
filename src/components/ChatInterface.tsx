@@ -218,7 +218,7 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
   const currentProject = experiences[currentProjectIndex]
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full pb-3">
       <div className="mb-4"></div>
 
       <div className={`flex h-full transition-all duration-300 ${isExpanded ? 'space-x-4' : ''}`}>

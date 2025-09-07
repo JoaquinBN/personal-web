@@ -2,6 +2,25 @@
 
 import { useState, useEffect, useCallback } from 'react'
 
+// Simple markdown renderer for bold and italic text
+const renderMarkdown = (text: string) => {
+  // Split text by markdown patterns while keeping delimiters
+  const parts = text.split(/(\*\*.*?\*\*|\*.*?\*)/g)
+  
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      // Bold text
+      return <strong key={index}>{part.slice(2, -2)}</strong>
+    } else if (part.startsWith('*') && part.endsWith('*')) {
+      // Italic text
+      return <em key={index}>{part.slice(1, -1)}</em>
+    } else {
+      // Regular text
+      return part
+    }
+  })
+}
+
 interface TypingEffectProps {
   text: string
   speed?: number
@@ -9,6 +28,7 @@ interface TypingEffectProps {
   onComplete?: () => void
   allowSkip?: boolean
   allowTouchSkip?: boolean
+  enableMarkdown?: boolean
 }
 
 export default function TypingEffect({ 
@@ -17,7 +37,8 @@ export default function TypingEffect({
   delay = 0,
   onComplete,
   allowSkip = false,
-  allowTouchSkip = false
+  allowTouchSkip = false,
+  enableMarkdown = false
 }: TypingEffectProps) {
   const [displayedText, setDisplayedText] = useState('')
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -77,13 +98,16 @@ export default function TypingEffect({
     }
   }, [currentIndex, text, speed, started, onComplete, isSkipped])
 
+  // Check if typing is complete
+  const isTypingComplete = currentIndex >= text.length || isSkipped
+
   return (
     <span 
       onClick={handleTouchSkip}
       className={allowTouchSkip ? 'cursor-pointer' : ''}
     >
-      {displayedText}
-      {currentIndex < text.length && !isSkipped && (
+      {enableMarkdown && isTypingComplete ? renderMarkdown(displayedText) : displayedText}
+      {!isTypingComplete && (
         <span className="typing-cursor">|</span>
       )}
     </span>

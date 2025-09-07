@@ -10,14 +10,15 @@
       "endDate": null,
       "years": "2023 - Present",
       "current": true,
-      "description": "Co-founded Weekn, a platform experimenting with AI-driven social interactions and data visualization. Led technical strategy and built full-stack systems combining conversational agents, thread simulations, and interactive city visualizations for research and public engagement.",
-      "technologies": ["React", "Next.js", "TypeScript", "Node.js", "Flutter", "MySQL", "PostgreSQL", "Cloudflare", "Vercel"],
+      "description": "Co-founded Weekn, a ticketing company focused on building a seamless mobile application for event organizers and attendees. Developed the MVP in under one month, enabling organizers to centralize all processes occurring within an event while providing a streamlined user experience through the app. Achieved 100k GMV in the first year, with the largest deployment powering a university festival hosting 3,000 daily attendees for a week.",
+      "technologies": ["Flutter", "React", "Node.js", "MySQL", "Cloudflare", "Vercel"],
       "highlights": [
-        "Designed and deployed large-scale thread simulation and visualization systems",
-        "Built cross-platform solutions (web, mobile) integrating AI pipelines and data analysis",
-        "Directed technical roadmap as CTO and co-founder"
+        "Developed MVP mobile application in under one month",
+        "Centralized ticketing and event processes to provide real-time data to organizers",
+        "Reached 100k GMV in the first year of operations",
+        "Supported a university festival with 3,000 attendees per day across a full week"
       ]
-    },
+    },    
     {
       "id": "thetide-lab",
       "logo": "/logos/tide.ico",

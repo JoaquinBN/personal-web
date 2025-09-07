@@ -43,11 +43,11 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
   const animationRef = useRef<number>()
 
   useEffect(() => {
-    // Center the chat initially
+    // Center the chat initially with bottom margin
     if (chatRef.current) {
       const rect = chatRef.current.getBoundingClientRect()
       const centerX = (window.innerWidth - rect.width) / 2
-      const centerY = (window.innerHeight - rect.height) / 2
+      const centerY = (window.innerHeight - rect.height - 32) / 2 // Account for 32px bottom margin
       setPosition({ x: Math.max(20, centerX), y: Math.max(20, centerY) })
     }
   }, [])
@@ -72,9 +72,9 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
       const newX = e.clientX - dragStart.x
       const newY = e.clientY - dragStart.y
       
-      // Constrain to viewport with smooth boundaries
+      // Constrain to viewport with smooth boundaries and bottom margin
       const maxX = window.innerWidth - (chatRef.current?.offsetWidth || 400)
-      const maxY = window.innerHeight - (chatRef.current?.offsetHeight || 300)
+      const maxY = window.innerHeight - (chatRef.current?.offsetHeight || 300) - 32 // Add 32px bottom margin
       
       const constrainedPosition = {
         x: Math.max(0, Math.min(newX, maxX)),
@@ -124,7 +124,7 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
       
       const newSize = {
         width: Math.max(300, Math.min(window.innerWidth - position.x - 20, resizeStart.width + deltaX)),
-        height: Math.max(200, Math.min(window.innerHeight - position.y - 20, resizeStart.height + deltaY))
+        height: Math.max(200, Math.min(window.innerHeight - position.y - 52, resizeStart.height + deltaY)) // 20px margin + 32px bottom margin
       }
       
       // Use requestAnimationFrame for smooth resize updates
@@ -152,7 +152,7 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
       setLastPosition(position)
       
       // Maximize to full screen with animation
-      setSize({ width: window.innerWidth - 40, height: window.innerHeight - 40 })
+      setSize({ width: window.innerWidth - 40, height: window.innerHeight - 72 }) // 40px sides + 32px bottom margin
       setPosition({ x: 20, y: 20 })
       setIsMaximized(true)
     }
