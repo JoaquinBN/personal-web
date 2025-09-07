@@ -1,0 +1,381 @@
+'use client'
+
+import { useState, useRef, useEffect } from 'react'
+import TypingEffect from './TypingEffect'
+
+interface Message {
+  id: number
+  sender: 'User' | 'Joaquin'
+  text: string
+  isTyping?: boolean
+}
+
+interface Project {
+  id: string
+  logo: string
+  name: string
+  position: string
+  years: string
+  description: string
+}
+
+const projects: Project[] = [
+  {
+    id: '1',
+    logo: '🚀',
+    name: 'TechCorp Platform',
+    position: 'Senior Full-Stack Developer',
+    years: '2022 - 2024',
+    description: 'Led the development of a scalable microservices platform serving 100k+ users. Built with React, Node.js, and AWS, focusing on performance optimization and user experience.'
+  },
+  {
+    id: '2',
+    logo: '💡',
+    name: 'InnovateAI',
+    position: 'Frontend Lead',
+    years: '2021 - 2022',
+    description: 'Spearheaded the frontend architecture for an AI-powered analytics dashboard. Implemented real-time data visualization and created a design system used across multiple products.'
+  },
+  {
+    id: '3',
+    logo: '🌟',
+    name: 'StartupXYZ',
+    position: 'Co-founder & CTO',
+    years: '2019 - 2021',
+    description: 'Co-founded and built the technical foundation for a fintech startup. Developed the MVP, managed a team of 5 developers, and scaled the platform to handle millions of transactions.'
+  }
+]
+
+interface ChatInterfaceProps {
+  onFirstMessage?: () => void
+  isExpanded?: boolean
+}
+
+export default function ChatInterface({ onFirstMessage, isExpanded = false }: ChatInterfaceProps) {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [inputValue, setInputValue] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+  const [showInput, setShowInput] = useState(true)
+  const [typingMessageId, setTypingMessageId] = useState<number | null>(null)
+  const [hasFirstMessage, setHasFirstMessage] = useState(false)
+  const [showMentions, setShowMentions] = useState(false)
+  const [mentionFilter, setMentionFilter] = useState('')
+  const [cursorPosition, setCursorPosition] = useState(0)
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(0)
+  
+  const chatContainerRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+    }
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
+
+  // Handle @ mentions
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    const position = e.target.selectionStart || 0
+    setInputValue(value)
+    setCursorPosition(position)
+
+    // Check for @ mentions
+    const beforeCursor = value.slice(0, position)
+    const atIndex = beforeCursor.lastIndexOf('@')
+    
+    if (atIndex !== -1 && atIndex === beforeCursor.length - 1) {
+      // Just typed @
+      setShowMentions(true)
+      setMentionFilter('')
+    } else if (atIndex !== -1 && /^@\w*$/.test(beforeCursor.slice(atIndex))) {
+      // Typing after @
+      const filter = beforeCursor.slice(atIndex + 1)
+      setShowMentions(true)
+      setMentionFilter(filter)
+    } else {
+      setShowMentions(false)
+    }
+  }
+
+  const insertMention = (projectName: string) => {
+    const beforeCursor = inputValue.slice(0, cursorPosition)
+    const afterCursor = inputValue.slice(cursorPosition)
+    const atIndex = beforeCursor.lastIndexOf('@')
+    
+    if (atIndex !== -1) {
+      const newValue = beforeCursor.slice(0, atIndex) + `@${projectName} ` + afterCursor
+      setInputValue(newValue)
+      setShowMentions(false)
+      
+      // Focus back to input
+      setTimeout(() => {
+        if (inputRef.current) {
+          const newPosition = atIndex + projectName.length + 2
+          inputRef.current.focus()
+          inputRef.current.setSelectionRange(newPosition, newPosition)
+        }
+      }, 0)
+    }
+  }
+
+  const filteredProjects = projects.filter(project =>
+    project.name.toLowerCase().includes(mentionFilter.toLowerCase())
+  )
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!inputValue.trim()) return
+
+    // Trigger first message callback
+    if (!hasFirstMessage && onFirstMessage) {
+      setHasFirstMessage(true)
+      onFirstMessage()
+    }
+
+    // Hide input and add user message
+    setShowInput(false)
+    const userMessage: Message = {
+      id: Date.now(),
+      sender: 'User',
+      text: inputValue.trim()
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    const messageText = inputValue.trim()
+    setInputValue('')
+    setIsTyping(true)
+
+    try {
+      // Call OpenAI API
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: messageText }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to get response')
+      }
+
+      const reader = response.body?.getReader()
+      if (!reader) {
+        throw new Error('No reader available')
+      }
+
+      const joaquinMessageId = Date.now() + 1
+      const joaquinMessage: Message = {
+        id: joaquinMessageId,
+        sender: 'Joaquin',
+        text: '',
+        isTyping: true
+      }
+      
+      setMessages(prev => [...prev, joaquinMessage])
+      setTypingMessageId(joaquinMessageId)
+      setIsTyping(false)
+
+      // Stream the response
+      let fullText = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        
+        const text = new TextDecoder().decode(value)
+        fullText += text
+        
+        setMessages(prev => 
+          prev.map(msg => 
+            msg.id === joaquinMessageId ? { ...msg, text: fullText } : msg
+          )
+        )
+      }
+
+      // Mark as complete
+      setMessages(prev => 
+        prev.map(msg => 
+          msg.id === joaquinMessageId ? { ...msg, isTyping: false } : msg
+        )
+      )
+      setTypingMessageId(null)
+
+    } catch (error) {
+      console.error('Error:', error)
+      // Fallback to mock response
+      const fallbackResponse = "Sorry, I'm having trouble connecting right now. Please try again later!"
+      const joaquinMessageId = Date.now() + 1
+      const joaquinMessage: Message = {
+        id: joaquinMessageId,
+        sender: 'Joaquin',
+        text: fallbackResponse,
+        isTyping: true
+      }
+      
+      setMessages(prev => [...prev, joaquinMessage])
+      setTypingMessageId(joaquinMessageId)
+      setIsTyping(false)
+    }
+
+    // Show input again after a delay
+    setTimeout(() => {
+      setShowInput(true)
+    }, 500)
+  }
+
+  const handleTypingComplete = (messageId: number) => {
+    setMessages(prev => 
+      prev.map(msg => 
+        msg.id === messageId ? { ...msg, isTyping: false } : msg
+      )
+    )
+    setTypingMessageId(null)
+    setTimeout(() => {
+      setShowInput(true)
+    }, 500)
+  }
+
+  const nextProject = () => {
+    setCurrentProjectIndex((prev) => (prev + 1) % projects.length)
+  }
+
+  const prevProject = () => {
+    setCurrentProjectIndex((prev) => (prev - 1 + projects.length) % projects.length)
+  }
+
+  const currentProject = projects[currentProjectIndex]
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="mb-4"></div>
+
+      <div className={`flex h-full transition-all duration-300 ${isExpanded ? 'space-x-4' : ''}`}>
+        {/* Chat Area */}
+        <div className={`flex flex-col transition-all duration-300 ${isExpanded ? 'w-3/5' : 'w-full'}`}>
+          {/* Chat Messages */}
+          <div 
+            ref={chatContainerRef}
+            className="flex-1 space-y-2 overflow-y-auto chat-container mb-4"
+          >
+            {messages.map((message) => (
+              <div key={message.id} className="text-gray-200 text-sm">
+                <span className="text-gray-400">{message.sender}: </span>
+                {message.isTyping ? (
+                  <TypingEffect 
+                    text={message.text}
+                    speed={20}
+                    onComplete={() => handleTypingComplete(message.id)}
+                  />
+                ) : (
+                  <span>{message.text}</span>
+                )}
+              </div>
+            ))}
+            
+            {isTyping && (
+              <div className="text-gray-200 text-sm">
+                <span className="text-gray-400">Joaquin: </span>
+                <span className="typing-cursor">|</span>
+              </div>
+            )}
+          </div>
+
+          {/* Input Area */}
+          <div className="relative">
+            {showMentions && (
+              <div className="absolute bottom-full left-0 right-0 mb-2 bg-gray-900 border border-gray-700 rounded-lg shadow-lg max-h-40 overflow-y-auto z-10">
+                {filteredProjects.map((project) => (
+                  <button
+                    key={project.id}
+                    onClick={() => insertMention(project.name)}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-800 flex items-center space-x-3 text-sm"
+                  >
+                    <span className="text-lg">{project.logo}</span>
+                    <div>
+                      <div className="text-white">{project.name}</div>
+                      <div className="text-gray-400 text-xs">{project.position}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+            
+            {showInput && (
+              <form onSubmit={handleSubmit}>
+                <div className="flex items-center">
+                  <span className="text-white mr-2">{'>'}</span>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    placeholder={inputValue ? "" : "chat with me"}
+                    className="flex-1 bg-transparent border-none text-gray-200 placeholder-gray-600 focus:outline-none text-sm focus:placeholder-gray-500 p-0"
+                    disabled={isTyping}
+                    autoFocus
+                  />
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+
+        {/* Experience Sidebar */}
+        {isExpanded && (
+          <div className="w-2/5 flex flex-col">
+            {/* Subtle separator */}
+            <div className="w-px bg-gray-800/50 self-start h-full absolute ml-[-8px]"></div>
+            
+            <div className="pl-4 flex flex-col h-full">
+              <h3 className="text-gray-500 text-xs uppercase tracking-wider mb-4 font-mono">Experience</h3>
+              
+              {/* Single Project Display */}
+              <div className="flex-1 flex flex-col min-h-0">
+                <div className="flex items-start space-x-3 mb-3">
+                  <span className="text-xl">{currentProject.logo}</span>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-white font-medium text-sm">{currentProject.name}</h4>
+                    <p className="text-gray-400 text-xs">{currentProject.position}</p>
+                    <p className="text-gray-500 text-xs">{currentProject.years}</p>
+                  </div>
+                </div>
+                
+                {/* Scrollable Description */}
+                <div className="flex-1 overflow-y-auto min-h-0 pr-2">
+                  <p className="text-gray-300 text-xs leading-relaxed">{currentProject.description}</p>
+                </div>
+              </div>
+
+              {/* Navigation */}
+              <div className="flex items-center justify-center space-x-4 mt-4 pt-3 border-t border-gray-800/50">
+                <button 
+                  onClick={prevProject}
+                  className="text-gray-500 hover:text-gray-300 text-xs transition-colors"
+                  aria-label="Previous project"
+                >
+                  ‹
+                </button>
+                
+                <span className="text-gray-600 text-xs font-mono">
+                  {currentProjectIndex + 1}/{projects.length}
+                </span>
+                
+                <button 
+                  onClick={nextProject}
+                  className="text-gray-500 hover:text-gray-300 text-xs transition-colors"
+                  aria-label="Next project"
+                >
+                  ›
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
