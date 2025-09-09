@@ -123,7 +123,7 @@ export default function MobileExperience({ onClose }: MobileExperienceProps) {
               className="text-gray-400 hover:text-white transition-colors"
               aria-label="GitHub"
             >
-              <Image src="/logos/github.svg" alt="GitHub" width={24} height={24} className="w-6 h-6" />
+              <Image src="/logos/social/github.svg" alt="GitHub" width={24} height={24} className="w-6 h-6" />
             </a>
             <a 
               href={personalInfo.contact.instagram} 
@@ -132,7 +132,7 @@ export default function MobileExperience({ onClose }: MobileExperienceProps) {
               className="text-gray-400 hover:text-white transition-colors"
               aria-label="Instagram"
             >
-              <Image src="/logos/instagram.svg" alt="Instagram" width={24} height={24} className="w-6 h-6" />
+              <Image src="/logos/social/instagram.svg" alt="Instagram" width={24} height={24} className="w-6 h-6" />
             </a>
             <a 
               href={personalInfo.contact.linkedin} 
@@ -141,7 +141,7 @@ export default function MobileExperience({ onClose }: MobileExperienceProps) {
               className="text-gray-400 hover:text-white transition-colors"
               aria-label="LinkedIn"
             >
-              <Image src="/logos/linkedin.svg" alt="LinkedIn" width={24} height={24} className="w-6 h-6" />
+              <Image src="/logos/social/linkedin.svg" alt="LinkedIn" width={24} height={24} className="w-6 h-6" />
             </a>
             <a 
               href={personalInfo.contact.twitter} 
@@ -150,7 +150,7 @@ export default function MobileExperience({ onClose }: MobileExperienceProps) {
               className="text-gray-400 hover:text-white transition-colors"
               aria-label="Twitter"
             >
-              <Image src="/logos/twitter.svg" alt="Twitter" width={24} height={24} className="w-6 h-6" />
+              <Image src="/logos/social/twitter.svg" alt="Twitter" width={24} height={24} className="w-6 h-6" />
             </a>
           </div>
         </div>

@@ -1,0 +1,31 @@
+{
+  "experiences": [
+    {
+      "id": "company-1",
+      "logo": "/logos/company1-logo.ico",
+      "name": "Company Name",
+      "position": "Your Position",
+      "years": "2020 - Present",
+      "description": "your experience",
+      "technologies": ["Technology 1", "Technology 2", "Technology 3"],
+      "highlights": [
+        "Key achievement or project highlight",
+        "Another important accomplishment",
+        "Quantifiable result or impact"
+      ]
+    },
+    {
+      "id": "company-2",
+      "logo": "/logos/company2-logo.ico",
+      "name": "Previous Company",
+      "position": "Previous Position",
+      "years": "2018 - 2020",
+      "description": "Description of your previous role and what you accomplished there.",
+      "technologies": ["Technology A", "Technology B"],
+      "highlights": [
+        "Key project or achievement",
+        "Skills developed or impact made"
+      ]
+    }
+  ]
+}

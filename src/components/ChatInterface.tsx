@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import TypingEffect from './TypingEffect'
-import { getExperiences, getSiteConfig, type Experience } from '@/lib/data'
+import { getExperiences, type Experience } from '@/lib/data'
 
 interface Message {
   id: number
@@ -13,7 +13,6 @@ interface Message {
 }
 
 const experiences = getExperiences()
-const config = getSiteConfig()
 
 interface ChatInterfaceProps {
   onFirstMessage?: () => void
@@ -151,18 +150,38 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
 
       // Stream the response
       let fullText = ''
+      let buffer = ''
+      
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
         
-        const text = new TextDecoder().decode(value)
-        fullText += text
+        const chunk = new TextDecoder().decode(value, { stream: true })
+        buffer += chunk
         
-        setMessages(prev => 
-          prev.map(msg => 
-            msg.id === joaquinMessageId ? { ...msg, text: fullText } : msg
-          )
-        )
+        // Process complete lines
+        const lines = buffer.split('\n')
+        buffer = lines.pop() || '' // Keep incomplete line in buffer
+        
+        for (const line of lines) {
+          if (line.startsWith('data: ') && line !== 'data: [DONE]') {
+            try {
+              const jsonData = JSON.parse(line.slice(6))
+              if (jsonData.choices?.[0]?.delta?.content) {
+                fullText += jsonData.choices[0].delta.content
+                
+                setMessages(prev => 
+                  prev.map(msg => 
+                    msg.id === joaquinMessageId ? { ...msg, text: fullText } : msg
+                  )
+                )
+              }
+            } catch (e) {
+              // Skip invalid JSON lines
+              continue
+            }
+          }
+        }
       }
 
       // Mark as complete

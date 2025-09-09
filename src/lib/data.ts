@@ -6,23 +6,14 @@ import config from '../../data/config.json'
 
 export interface PersonalInfo {
   name: string
-  firstName: string
-  lastName: string
   birthday: string
-  age: {
-    calculate: boolean
-    birthDate: string
-  }
-  title: string
   aboutText: string
-  skills: string[]
   contact: {
     email: string
     linkedin: string
     github: string
     twitter: string
     instagram: string
-    website: string
   }
 }
 
@@ -31,11 +22,7 @@ export interface Experience {
   logo: string // Path to logo image file (e.g., "/logos/company.ico")
   name: string
   position: string
-  company: string
-  startDate: string
-  endDate: string | null
   years: string
-  current: boolean
   description: string
   technologies: string[]
   highlights: string[]
@@ -67,7 +54,7 @@ export function getPersonalInfo(): PersonalInfo {
 // Get calculated age
 export function getCurrentAge(): number {
   const personal = getPersonalInfo()
-  return calculateAge(personal.age.birthDate)
+  return calculateAge(personal.birthday)
 }
 
 // Get all experiences
@@ -98,7 +85,6 @@ export function searchExperiences(query: string): Experience[] {
   const searchTerm = query.toLowerCase()
   return experiencesData.experiences.filter(exp =>
     exp.name.toLowerCase().includes(searchTerm) ||
-    exp.company.toLowerCase().includes(searchTerm) ||
     exp.position.toLowerCase().includes(searchTerm)
   )
 }

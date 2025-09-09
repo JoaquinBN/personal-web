@@ -1,0 +1,23 @@
+{
+  "site": {
+    "title": "Your Name",
+    "description": "Brief description of yourself or your profession for SEO and social media.",
+    "url": "https://yourwebsite.com",
+    "author": "Your Full Name",
+    "logo": "/logos/your-logo.svg"
+  },
+  "ui": {
+    "typingSpeed": {
+      "name": 80,
+      "aboutText": 15
+    },
+    "delays": {
+      "initial": 500,
+      "aboutText": 200
+    },
+    "animations": {
+      "enableSkip": true,
+      "allowTouchSkip": true
+    }
+  }
+}

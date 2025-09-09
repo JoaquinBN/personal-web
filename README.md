@@ -1,116 +1,76 @@
-# Personal Web
+# Personal Website
 
-A modern personal website built with Next.js 14, TypeScript, and Bun for blazing fast performance.
+A minimalist website with a simple UI to share your vision and experiences. People can chat with your "digital twin". You can check it out here: [www.joaquinbressan.com](https://www.joaquinbressan.com)
 
-## 🚀 Tech Stack
+## Features
 
-- **Framework**: [Next.js 14](https://nextjs.org/) with App Router
-- **Runtime**: [Bun](https://bun.sh/) for fast package management and runtime
-- **Language**: [TypeScript](https://www.typescriptlang.org/) for type safety
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) for utility-first CSS
-- **Linting**: ESLint with Next.js configuration
+- Minimalist design  
+- AI chat integration (desktop only — mobile was a pain in the ass, got lazy)  
+- No database or analytics to see activity or chat conversations (might do it later)  
 
-## 📋 Prerequisites
+### Small Disclaimer About Having Chat on Your Personal Site ⚠️⚠️⚠️
 
-Make sure you have Bun installed on your system:
+>Look, putting an AI chat on your personal website might mean smart people finding a way to spam your OpenAI credits. I added some basic protection:
+>
+>- **Rate limiting**: 5 requests per minute per IP (keeps the trolls away)
+>- **CORS**: Yes, the most hated guy in web development. But it prevents other websites from embedding your chat and draining your wallet. I made sure you can disable it during development so you don't hate your life.
+>
+>Sooo if you enable the AI chat, make sure to keep an eye on your usage costs or set up rate limiting or spending limits with your OpenAI API key (or whatever LLM provider you use).
+
+## Setup
 
 ```bash
-# Install Bun (if not already installed)
-curl -fsSL https://bun.sh/install | bash
+git clone https://github.com/yourusername/personal-web.git
+cd personal-web
+chmod +x setup.sh
+./setup.sh
+# Fill files in /data with your information (check README in data.example folder)
+npm install
+npm run dev
 ```
 
-## 🛠️ Installation
+I used OpenAI for my digital twin. You need an OpenAI API key if you want the chat to work. Add it to `.env.local`.
 
-1. **Install dependencies**:
-   ```bash
-   bun install
-   ```
+### Environment Variables
 
-2. **Start the development server**:
-   ```bash
-   bun dev
-   ```
-
-3. **Open your browser** and navigate to [http://localhost:3000](http://localhost:3000)
-
-## 📜 Available Scripts
-
-- `bun dev` - Start the development server
-- `bun build` - Build the application for production
-- `bun start` - Start the production server
-- `bun lint` - Run ESLint to check for code issues
-- `bun type-check` - Run TypeScript compiler to check for type errors
-
-## 🏗️ Project Structure
+Create a `.env.local` file:
 
 ```
-personal-web/
+OPENAI_API_KEY=your-openai-api-key
+SITE_URL=https://yourwebsite.com
+ENABLE_CORS=true                    # Set to false for development if needed
+ALLOWED_ORIGINS=https://yourwebsite.com  # Optional, comma-separated
+```
+
+**Security Note**: CORS is enabled by default to prevent other websites from using your OpenAI credits. You can disable it during development by setting `ENABLE_CORS=false`.
+
+## Project Structure
+
+```
+├── data/                   # Your content
+│   ├── personal.json       # Basic info, bio, contact
+│   ├── experiences.json    # Work history, projects
+│   ├── config.json         # Site settings
+│   └── llm-prompt.md       # AI personality
+├── data.example/           # Examples and docs
 ├── src/
 │   ├── app/
-│   │   ├── globals.css      # Global styles
-│   │   ├── layout.tsx       # Root layout component
-│   │   └── page.tsx         # Home page
-│   └── components/          # Reusable components (create as needed)
-├── public/                  # Static assets
-├── next.config.js          # Next.js configuration
-├── tailwind.config.ts      # Tailwind CSS configuration
-├── tsconfig.json           # TypeScript configuration
-└── package.json            # Project dependencies and scripts
+│   │   ├── api/chat/       # OpenAI chat endpoint
+│   │   ├── layout.tsx      # Root layout
+│   │   └── page.tsx        # Main page
+│   ├── components/         # UI components (chat, animations, etc)
+│   └── lib/                # Data utilities
+└── public/
+    ├── logos/
+    │   └── social/         # GitHub, Twitter, etc icons
+    ├── background.svg      # Background pattern
+    └── fonts/              # Menlo font files
 ```
 
-## 🎨 Customization
+## License
 
-### Styling
-- Modify `src/app/globals.css` for global styles
-- Update `tailwind.config.ts` to customize Tailwind theme
-- Add custom components in `src/components/`
+MIT
 
-### Configuration
-- Update `next.config.js` for Next.js settings
-- Modify `tsconfig.json` for TypeScript configuration
-- Adjust ESLint rules in `.eslintrc.json`
+## Inspiration and Credits
 
-## 🚀 Deployment
-
-### Vercel (Recommended)
-1. Push your code to GitHub
-2. Connect your repository to [Vercel](https://vercel.com/)
-3. Vercel will automatically detect Next.js and deploy
-
-### Other Platforms
-- **Netlify**: Use `bun build` and deploy the `out` directory
-- **Railway**: Connect your GitHub repository
-- **Docker**: Create a Dockerfile for containerized deployment
-
-## 🔧 Development Tips
-
-1. **Hot Reload**: The development server supports hot reload for instant updates
-2. **Type Checking**: Run `bun type-check` regularly to catch TypeScript errors
-3. **Linting**: Use `bun lint` to maintain code quality
-4. **Path Aliases**: Use `@/` for imports from the `src` directory
-
-## 📝 Environment Variables
-
-Create a `.env.local` file in the root directory for environment variables:
-
-```env
-# Example environment variables
-NEXT_PUBLIC_API_URL=your_api_url_here
-DATABASE_URL=your_database_url_here
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
-Built with ❤️ using Next.js and Bun
+Inspired by the slide-to-unlock button on the iPhone 4 — best UI component ever made.

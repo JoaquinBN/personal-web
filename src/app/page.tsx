@@ -15,8 +15,10 @@ const config = getSiteConfig()
 export default function Home() {
   const [started, setStarted] = useState(false)
   const [showSlideToUnlock, setShowSlideToUnlock] = useState(false)
+  const [showSlideButton, setShowSlideButton] = useState(false)
+  const [showSocialLogos, setShowSocialLogos] = useState(false)
   const [showChat, setShowChat] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(true) // Default to expanded for better desktop experience
   const [nameTypingComplete, setNameTypingComplete] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [showCopyToast, setShowCopyToast] = useState(false)
@@ -40,7 +42,7 @@ export default function Home() {
   }, [started])
 
   const handleClick = () => {
-    if (!started && isMobile) {
+    if (!started) {
       setStarted(true)
     }
   }
@@ -57,6 +59,14 @@ export default function Home() {
   const handleTypingComplete = () => {
     setTimeout(() => {
       setShowSlideToUnlock(true)
+      // Start slide button animation
+      setTimeout(() => {
+        setShowSlideButton(true)
+        // Start social logos animation after slide button appears
+        setTimeout(() => {
+          setShowSocialLogos(true)
+        }, 400) // Wait for slide button animation to complete
+      }, 100)
     }, 300)
   }
 
@@ -159,11 +169,22 @@ export default function Home() {
             {/* Slide to unlock */}
             {showSlideToUnlock && (
               <>
-                <SlideToUnlock 
-                  onUnlock={handleSlideUnlock} 
-                  isVisible={!showChat && !showMobileExperience}
-                  isMobile={isMobile}
-                />
+                <div 
+                  className={`transition-all duration-300 ${
+                    showSlideButton 
+                      ? 'opacity-100 transform translate-y-0' 
+                      : 'opacity-0 transform translate-y-4'
+                  }`}
+                  style={{ 
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                  }}
+                >
+                  <SlideToUnlock 
+                    onUnlock={handleSlideUnlock} 
+                    isVisible={!showChat && !showMobileExperience}
+                    isMobile={isMobile}
+                  />
+                </div>
                 
                 {/* Social Media Links */}
                 <div className="mt-6 md:mt-8 flex justify-center items-center space-x-4 md:space-x-6">
@@ -171,37 +192,69 @@ export default function Home() {
                     href={personalInfo.contact.github} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className={`text-gray-400 hover:text-white ${
+                      showSocialLogos 
+                        ? 'opacity-100 transform translate-y-0' 
+                        : 'opacity-0 transform translate-y-2'
+                    }`}
+                    style={{
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      transitionDelay: showSocialLogos ? '0ms' : '0ms'
+                    }}
                     aria-label="GitHub"
                   >
-                    <Image src="/logos/github.svg" alt="GitHub" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
+                    <Image src="/logos/social/github.svg" alt="GitHub" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                   <a 
                     href={personalInfo.contact.instagram} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className={`text-gray-400 hover:text-white ${
+                      showSocialLogos 
+                        ? 'opacity-100 transform translate-y-0' 
+                        : 'opacity-0 transform translate-y-2'
+                    }`}
+                    style={{
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      transitionDelay: showSocialLogos ? '100ms' : '0ms'
+                    }}
                     aria-label="Instagram"
                   >
-                    <Image src="/logos/instagram.svg" alt="Instagram" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
+                    <Image src="/logos/social/instagram.svg" alt="Instagram" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                   <a 
                     href={personalInfo.contact.linkedin} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className={`text-gray-400 hover:text-white ${
+                      showSocialLogos 
+                        ? 'opacity-100 transform translate-y-0' 
+                        : 'opacity-0 transform translate-y-2'
+                    }`}
+                    style={{
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      transitionDelay: showSocialLogos ? '200ms' : '0ms'
+                    }}
                     aria-label="LinkedIn"
                   >
-                    <Image src="/logos/linkedin.svg" alt="LinkedIn" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
+                    <Image src="/logos/social/linkedin.svg" alt="LinkedIn" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                   <a 
                     href={personalInfo.contact.twitter} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className={`text-gray-400 hover:text-white ${
+                      showSocialLogos 
+                        ? 'opacity-100 transform translate-y-0' 
+                        : 'opacity-0 transform translate-y-2'
+                    }`}
+                    style={{
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      transitionDelay: showSocialLogos ? '300ms' : '0ms'
+                    }}
                     aria-label="Twitter"
                   >
-                    <Image src="/logos/twitter.svg" alt="Twitter" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
+                    <Image src="/logos/social/twitter.svg" alt="Twitter" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
                 </div>
               </>

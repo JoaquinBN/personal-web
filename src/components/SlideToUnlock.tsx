@@ -47,7 +47,9 @@ export default function SlideToUnlock({ onUnlock, isVisible = true, isMobile = f
 
       const rect = containerRef.current.getBoundingClientRect()
       const maxPos = getMaxPosition()
-      const newPosition = Math.max(0, Math.min(maxPos, clientX - rect.left - 40))
+      const newPosition = Math.max(0, Math.min(maxPos, clientX - rect.left - 35))
+      
+      // Update both position and currentPosition immediately for fluid movement
       setPosition(newPosition)
       setCurrentPosition(newPosition)
     }
@@ -184,7 +186,7 @@ export default function SlideToUnlock({ onUnlock, isVisible = true, isMobile = f
             background: 'linear-gradient(to bottom, #FBFBFC 30%, #A5A4A2 100%)',
             boxShadow: '0 2px 6px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.9)',
             border: '1px solid #999',
-            transition: isDragging || isPressed ? 'transform 0.5s ease-out, scale 0.2s ease-out' : 'transform 0.5s ease-out, scale 0.2s ease-out',
+            transition: isDragging ? 'none' : isPressed ? 'transform 0.5s ease-out, scale 0.2s ease-out' : 'transform 0.3s ease-out, scale 0.2s ease-out',
             scale: isPressed ? '0.95' : '1'
           }}
           onMouseDown={isMobile ? undefined : handleMouseDown}
