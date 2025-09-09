@@ -1,10 +1,10 @@
 {
   "site": {
-    "title": "Your Name",
-    "description": "Brief description of yourself or your profession for SEO and social media.",
-    "url": "https://yourwebsite.com",
-    "author": "Your Full Name",
-    "logo": "/logos/your-logo.svg",
+    "title": "Joaquin Bressan Nazar",
+    "description": "Co-founder and CTO passionate about building AI-driven systems and meaningful digital experiences.",
+    "url": "https://joaquinbressan.com",
+    "author": "Joaquin Bressan Nazar",
+    "logo": "/logos/logo.svg",
     "logoMadeWith": "https://signature.cnrad.dev/"
   },
   "ui": {

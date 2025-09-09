@@ -1,0 +1,39 @@
+{
+  "name": "Joaquin Bressan Nazar",
+  "firstName": "Joaquin",
+  "lastName": "Bressan Nazar",
+  "birthday": "2001-08-01",
+  "age": {
+    "calculate": true,
+    "birthDate": "2001-08-01"
+  },
+  "title": "Co-Founder & CTO @ Weekn",
+  "aboutText": "**Trust is at an all-time low**. Many blame AI, but I see it as a human-enhancer. It didn't create the problem, it amplified it. And in doing so revealed opportunities we couldn't reach before.\n\nUI/UX has always been about making complexity intuitive. **Voice AI is the next natural step**, turning complexity itself into conversation.\n\nMost systems are just workarounds for human limits. Banks segment customers not from deep insight, but because no analyst can process millions of rows at once. AI can. **Combined with human intuition, unsupervised AI makes complexity accessible at scale**.\n\nRight now I'm exploring the future of AI-enabled autonomous organizations, pushing toward *effectiveness* and *efficiency* where institutions fall short. My vision of future orgs?a **autonomous by default, human by exception, decentralized by design**.\n\n**- JBN**",
+  "aboutTextFull": "We live in a time where trust is at an all-time low. Many mistakenly attribute this to Artificial Intelligence, but I see AI as a human-enhancer. It didn't create the problem, it amplified what was already there. And in doing so, it opened doors to opportunities we couldn't reach before.\n\nI've always seen UI/UX as the art of making complexity intuitive. Oral expression is our most complete form of communication. So what if complexity itself could be made conversational? *Voice AI is, to me, the next natural interface.*\n\nMost systems we use today are really just bridges between technology and human comprehension. Take banking, for example: customers are placed into categories and segments. I don't believe those segments came from a deep understanding of people, but rather from the limits of analysts who can't process millions of rows and columns at once. AI can. *I believe unsupervised AI, combined with human intuition, can unlock new potential: making complexity accessible at scale.* The unsupervised navigation of large datasets is only one piece of this puzzle.\n\nRight now, I'm exploring the future of AI-enabled autonomous organizations, and their path to true **effectiveness** and **efficiency**. That is something current institutions haven't yet achieved. My vision for the future of organizations is simple: *autonomous by default, human by exception, and decentralized by design*.",
+  "skills": [
+    "Python",
+    "AI & Machine Learning",
+    "Large Language Models (LLMs)",
+    "Retrieval-Augmented Generation (RAG)",
+    "Conversational AI",
+    "Full-stack Development",
+    "Next.js",
+    "Node.js",
+    "React",
+    "Mobile Development (Flutter, iOS/Android)",
+    "Database Systems (MySQL, PostgreSQL, Supabase)",
+    "Cloud Infrastructure (AWS, Cloudflare, Vercel)",
+    "Data Engineering & Visualization",
+    "Computer Vision & Data Annotation",
+    "Startup Leadership",
+    "Technical Project Management"
+  ],
+  "contact": {
+    "email": "joaquinbressan@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/joaquin-bressan",
+    "github": "https://github.com/JoaquinBN/personal-web",
+    "twitter": "https://twitter.com/joaquinbressann",
+    "instagram": "https://www.instagram.com/joaquinbressan",
+    "website": "joaquinbressan.com"
+  }
+}

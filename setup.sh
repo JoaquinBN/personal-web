@@ -8,28 +8,26 @@ set -e
 echo "🚀 Setting up your Personal Portfolio Website..."
 echo
 
-# Check if data directory exists
-if [ ! -d "data" ]; then
-    mkdir data
-fi
-
-# Copy example files to data directory
-echo "📋 Copying example files to data directory..."
-for file in data.example/*.example.*; do
-    if [ -f "$file" ]; then
-        # Get the filename without .example
-        filename=$(basename "$file")
-        newname=${filename/.example/}
-        
-        # Only copy if the target doesn't exist
-        if [ ! -f "data/$newname" ]; then
+# Setup data directory
+echo "📋 Setting up your data directory..."
+if [ -d "data" ] && [ "$(ls -A data 2>/dev/null)" ]; then
+    echo "   ⚠️  data/ directory already exists with content (this might be example data)"
+    echo "   Remember to replace all files in data/ with your personal information"
+    echo "   Check data.example/ for structure reference"
+else
+    echo "   Creating data/ directory from examples..."
+    mkdir -p data
+    for file in data.example/*.example.*; do
+        if [ -f "$file" ]; then
+            # Get the filename without .example
+            filename=$(basename "$file")
+            newname=${filename/.example/}
+            
             cp "$file" "data/$newname"
             echo "   ✓ Created data/$newname"
-        else
-            echo "   ⚠ data/$newname already exists, skipping"
         fi
-    fi
-done
+    done
+fi
 
 echo
 

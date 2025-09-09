@@ -29,7 +29,7 @@ yarn-error.log*
 .env*.local
 
 # Personal content (use data.example/ for templates)
-data/
+# data/
 
 # vercel
 .vercel
