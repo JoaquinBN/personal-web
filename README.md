@@ -2,7 +2,7 @@
 
 A minimalist website with a simple UI to share your vision and experiences. People can chat with your "digital twin". You can check it out here: [www.joaquinbressan.com](https://www.joaquinbressan.com)
 
-> **⚠️ IMPORTANT:** This repo contains my personal information as an example. **You MUST replace all content in the `data/` folder with your own information** before deploying. Use the `data.example/` folder as a reference for the structure.
+> **⚠️ IMPORTANT:** **You MUST replace all content in the `data/` folder with your own information** before deploying. Use the `data.example/` folder as a reference for the structure.
 
 ## Features
 
