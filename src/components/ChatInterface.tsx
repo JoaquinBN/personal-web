@@ -243,7 +243,14 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
 
       <div className={`flex h-full transition-all duration-300 ${isExpanded ? 'space-x-4' : ''}`}>
         {/* Chat Area */}
-        <div className={`flex flex-col transition-all duration-300 ${isExpanded ? 'w-3/5' : 'w-full'}`}>
+        <div 
+          className={`flex flex-col transition-all duration-300 ${isExpanded ? 'w-3/5' : 'w-full'} cursor-text`}
+          onClick={() => {
+            if (inputRef.current && showInput) {
+              inputRef.current.focus()
+            }
+          }}
+        >
           {/* Chat Messages */}
           <div 
             ref={chatContainerRef}
@@ -307,8 +314,9 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
                     type="text"
                     value={inputValue}
                     onChange={handleInputChange}
-                    placeholder={inputValue ? "" : "chat with me"}
-                    className="flex-1 bg-transparent border-none text-gray-200 placeholder-gray-600 focus:outline-none text-sm focus:placeholder-gray-500 p-0"
+                    placeholder={inputValue ? "" : "ask me anything"}
+                    className="flex-1 bg-transparent border-none text-gray-200 placeholder-gray-600 focus:outline-none focus:ring-0 focus:border-none focus:shadow-none text-sm focus:placeholder-gray-500 p-0 transition-none"
+                    style={{ boxShadow: 'none', transition: 'none' }}
                     disabled={isTyping}
                     autoFocus
                   />
@@ -325,7 +333,7 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
             <div className="w-px bg-gray-800/50 self-start h-full absolute ml-[-8px]"></div>
             
             <div className="pl-4 flex flex-col h-full">
-              <h3 className="text-gray-500 text-xs uppercase tracking-wider mb-4 font-mono">Experience</h3>
+              <h3 className="text-gray-500 text-sm uppercase tracking-wider mb-4 font-mono">Experience</h3>
               
               {/* Single Project Display */}
               <div className="flex-1 flex flex-col min-h-0">
@@ -338,15 +346,15 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
                     className="w-8 h-8 object-contain flex-shrink-0"
                   />
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-white font-medium text-sm">{currentProject.name}</h4>
-                    <p className="text-gray-400 text-xs">{currentProject.position}</p>
-                    <p className="text-gray-500 text-xs">{currentProject.years}</p>
+                    <h4 className="text-white font-medium text-base">{currentProject.name}</h4>
+                    <p className="text-gray-400 text-sm">{currentProject.position}</p>
+                    <p className="text-gray-500 text-sm">{currentProject.years}</p>
                   </div>
                 </div>
                 
                 {/* Scrollable Description */}
                 <div className="flex-1 overflow-y-auto min-h-0 pr-2">
-                  <p className="text-gray-300 text-xs leading-relaxed">{currentProject.description}</p>
+                  <p className="text-gray-300 text-sm leading-relaxed">{currentProject.description}</p>
                 </div>
               </div>
 
@@ -354,19 +362,19 @@ export default function ChatInterface({ onFirstMessage, isExpanded = false }: Ch
               <div className="flex items-center justify-center space-x-4 mt-4 pt-3 border-t border-gray-800/50">
                 <button 
                   onClick={prevProject}
-                  className="text-gray-500 hover:text-gray-300 text-xs transition-colors"
+                  className="text-gray-500 hover:text-gray-300 text-sm transition-colors"
                   aria-label="Previous project"
                 >
                   ‹
                 </button>
                 
-                <span className="text-gray-600 text-xs font-mono">
+                <span className="text-gray-600 text-sm font-mono">
                   {currentProjectIndex + 1}/{experiences.length}
                 </span>
                 
                 <button 
                   onClick={nextProject}
-                  className="text-gray-500 hover:text-gray-300 text-xs transition-colors"
+                  className="text-gray-500 hover:text-gray-300 text-sm transition-colors"
                   aria-label="Next project"
                 >
                   ›

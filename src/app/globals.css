@@ -8,22 +8,7 @@ body {
   overflow-x: hidden;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('/background.svg');
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-  background-position: center center;
-  opacity: 0.15;
-  filter: blur(5px);
-  z-index: -1;
-  pointer-events: none;
-}
+/* Background handled by Silk component */
 
 @font-face {
   font-family: 'Menlo';
@@ -87,7 +72,7 @@ html, body {
 
 body {
   font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
-  background-color: var(--background);
+  background-color: transparent;
   color: var(--foreground);
   line-height: 1.6;
   font-size: 14px;
@@ -153,7 +138,11 @@ body {
 /* Input focus styles */
 input:focus {
   outline: none;
-  background-color: var(--input);
+}
+
+/* Remove transitions from chat input */
+.glass-chat-content input {
+  transition: none !important;
 }
 
 /* Glass morphism styles */

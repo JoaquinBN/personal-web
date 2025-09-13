@@ -7,6 +7,7 @@ import ChatInterface from '@/components/ChatInterface'
 import DraggableGlassChat from '@/components/DraggableGlassChat'
 import SlideToUnlock from '@/components/SlideToUnlock'
 import MobileExperience from '@/components/MobileExperience'
+import Silk from '@/components/Backgrounds/Silk'
 import { getPersonalInfo, getCurrentAge, getSiteConfig } from '@/lib/data'
 
 const personalInfo = getPersonalInfo()
@@ -91,8 +92,19 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen px-6">
-      <div className="max-w-lg w-full mx-auto">
+    <main className="min-h-screen px-6 relative">
+      {/* Silk Background */}
+      <div className="fixed inset-0 z-0">
+        <Silk 
+          speed={5}
+          scale={1.5}
+          color="#262528"
+          noiseIntensity={2}
+          rotation={1}
+        />
+      </div>
+      
+      <div className="max-w-lg w-full mx-auto relative z-10">
         {!started ? (
           /* Initial view - Just name, age and press enter */
           <div className="flex flex-col items-center justify-center min-h-screen">
@@ -136,9 +148,10 @@ export default function Home() {
             )}
           </div>
         ) : (
-          <div className="pt-16">
-            {/* Fixed name/age/email at top */}
-            <div className="text-center mb-6 md:mb-8">
+          <div className="flex flex-col justify-center min-h-screen md:py-16">
+            <div className="w-full">
+              {/* Fixed name/age/email at top */}
+              <div className="text-center mb-6 md:mb-8">
               <h1 className="text-lg md:text-3xl font-bold text-white mb-2">
                 {personalInfo.name}, {age}
               </h1>
@@ -151,7 +164,7 @@ export default function Home() {
             </div>
             
             {/* About text flows from top to bottom */}
-            <div className="text-xs md:text-base text-gray-200 leading-relaxed whitespace-pre-line mb-6 md:mb-8">
+            <div className="text-xs md:text-base text-gray-200 leading-relaxed whitespace-pre-line mb-6 md:mb-8 text-justify">
               <span className="text-white">{'>'}</span>
               <span className="ml-2">
                 <TypingEffect 
@@ -205,24 +218,7 @@ export default function Home() {
                   >
                     <Image src="/logos/social/github.svg" alt="GitHub" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
                   </a>
-                  <a 
-                    href={personalInfo.contact.instagram} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={`text-gray-400 hover:text-white ${
-                      showSocialLogos 
-                        ? 'opacity-100 transform translate-y-0' 
-                        : 'opacity-0 transform translate-y-2'
-                    }`}
-                    style={{
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transitionDelay: showSocialLogos ? '100ms' : '0ms'
-                    }}
-                    aria-label="Instagram"
-                  >
-                    <Image src="/logos/social/instagram.svg" alt="Instagram" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
-                  </a>
-                  <a 
+                  <a
                     href={personalInfo.contact.linkedin} 
                     target="_blank" 
                     rel="noopener noreferrer"
@@ -233,7 +229,7 @@ export default function Home() {
                     }`}
                     style={{
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transitionDelay: showSocialLogos ? '200ms' : '0ms'
+                      transitionDelay: showSocialLogos ? '100ms' : '0ms'
                     }}
                     aria-label="LinkedIn"
                   >
@@ -250,7 +246,7 @@ export default function Home() {
                     }`}
                     style={{
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transitionDelay: showSocialLogos ? '300ms' : '0ms'
+                      transitionDelay: showSocialLogos ? '200ms' : '0ms'
                     }}
                     aria-label="Twitter"
                   >
@@ -259,6 +255,7 @@ export default function Home() {
                 </div>
               </>
             )}
+            </div>
           </div>
         )}
       </div>
