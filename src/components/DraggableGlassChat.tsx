@@ -208,7 +208,13 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
       }}
       onMouseDown={handleMouseDown}
     >
-      <div className="glass-chat-header drag-handle">
+      <div 
+        className="glass-chat-header drag-handle"
+        onDoubleClick={(e) => {
+          e.stopPropagation()
+          handleMaximize()
+        }}
+      >
         <div className="flex items-center space-x-2">
           <button
             className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors cursor-pointer relative flex items-center justify-center"
