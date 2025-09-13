@@ -153,7 +153,11 @@ body {
 /* Input focus styles */
 input:focus {
   outline: none;
-  background-color: var(--input);
+}
+
+/* Remove transitions from chat input */
+.glass-chat-content input {
+  transition: none !important;
 }
 
 /* Glass morphism styles */

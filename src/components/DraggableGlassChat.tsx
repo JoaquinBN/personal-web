@@ -12,24 +12,11 @@ interface DraggableGlassChatProps {
 export default function DraggableGlassChat({ children, onClose, isExpanded = false, onToggleExpand }: DraggableGlassChatProps) {
   const [position, setPosition] = useState({ x: 50, y: 50 })
   const [size, setSize] = useState({ 
-    width: isExpanded ? 600 : 400, 
-    height: isExpanded ? 400 : 300 
+    width: 900, 
+    height: 675 
   })
   
-  // Update size when expanded state changes
-  useEffect(() => {
-    if (isExpanded) {
-      setSize(prev => ({ 
-        width: prev.width < 600 ? 600 : prev.width,
-        height: prev.height < 400 ? 400 : prev.height
-      }))
-    } else if (!isExpanded) {
-      setSize(prev => ({
-        width: prev.width === 600 ? 400 : prev.width,
-        height: prev.height === 400 ? 300 : prev.height
-      }))
-    }
-  }, [isExpanded])
+  // Removed size changes based on isExpanded to maintain consistent popup size
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
   const [isMaximized, setIsMaximized] = useState(false)
@@ -38,7 +25,7 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 })
   const [hoveredButton, setHoveredButton] = useState<string | null>(null)
   const [lastPosition, setLastPosition] = useState({ x: 50, y: 50 })
-  const [lastSize, setLastSize] = useState({ width: 400, height: 300 })
+  const [lastSize, setLastSize] = useState({ width: 900, height: 675 })
   const chatRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<number>()
 
@@ -47,8 +34,8 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
     if (chatRef.current) {
       const rect = chatRef.current.getBoundingClientRect()
       const centerX = (window.innerWidth - rect.width) / 2
-      const centerY = (window.innerHeight - rect.height - 32) / 2 // Account for 32px bottom margin
-      setPosition({ x: Math.max(20, centerX), y: Math.max(20, centerY) })
+      const centerY = (window.innerHeight - rect.height - 64) / 2 // Account for 32px top and bottom margins
+      setPosition({ x: Math.max(32, centerX), y: Math.max(32, centerY) })
     }
   }, [])
 
@@ -72,13 +59,13 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
       const newX = e.clientX - dragStart.x
       const newY = e.clientY - dragStart.y
       
-      // Constrain to viewport with smooth boundaries and bottom margin
-      const maxX = window.innerWidth - (chatRef.current?.offsetWidth || 400)
-      const maxY = window.innerHeight - (chatRef.current?.offsetHeight || 300) - 32 // Add 32px bottom margin
+      // Constrain to viewport with smooth boundaries and 32px margins on all sides
+      const maxX = window.innerWidth - (chatRef.current?.offsetWidth || 900) - 32 // 32px right margin
+      const maxY = window.innerHeight - (chatRef.current?.offsetHeight || 675) - 32 // 32px bottom margin
       
       const constrainedPosition = {
-        x: Math.max(0, Math.min(newX, maxX)),
-        y: Math.max(0, Math.min(newY, maxY))
+        x: Math.max(32, Math.min(newX, maxX)), // 32px left margin
+        y: Math.max(32, Math.min(newY, maxY))  // 32px top margin
       }
       
       // Use requestAnimationFrame for smooth updates
@@ -123,8 +110,8 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
       const deltaY = e.clientY - resizeStart.y
       
       const newSize = {
-        width: Math.max(300, Math.min(window.innerWidth - position.x - 20, resizeStart.width + deltaX)),
-        height: Math.max(200, Math.min(window.innerHeight - position.y - 52, resizeStart.height + deltaY)) // 20px margin + 32px bottom margin
+        width: Math.max(300, Math.min(window.innerWidth - position.x - 32, resizeStart.width + deltaX)), // 32px right margin
+        height: Math.max(200, Math.min(window.innerHeight - position.y - 32, resizeStart.height + deltaY)) // 32px bottom margin
       }
       
       // Use requestAnimationFrame for smooth resize updates
@@ -152,8 +139,8 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
       setLastPosition(position)
       
       // Maximize to full screen with animation
-      setSize({ width: window.innerWidth - 40, height: window.innerHeight - 72 }) // 40px sides + 32px bottom margin
-      setPosition({ x: 20, y: 20 })
+      setSize({ width: window.innerWidth - 64, height: window.innerHeight - 64 }) // 32px margins on all sides
+      setPosition({ x: 32, y: 32 })
       setIsMaximized(true)
     }
     
@@ -235,12 +222,12 @@ export default function DraggableGlassChat({ children, onClose, isExpanded = fal
             className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors cursor-pointer relative flex items-center justify-center"
             onClick={(e) => {
               e.stopPropagation()
-              /* Minimize functionality could go here */
+              onClose?.()
             }}
             onMouseDown={(e) => e.stopPropagation()}
             onMouseEnter={() => setHoveredButton('minimize')}
             onMouseLeave={() => setHoveredButton(null)}
-            title="Minimize"
+            title="Close"
           >
             {hoveredButton === 'minimize' && (
               <span className="text-black text-xs font-bold leading-none">−</span>
