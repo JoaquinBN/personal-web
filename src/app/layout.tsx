@@ -1,40 +1,33 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { getSiteConfig } from '@/lib/data'
-
-const config = getSiteConfig()
 
 export const metadata: Metadata = {
-  title: config.site.title,
-  description: config.site.description,
-  authors: [{ name: config.site.author }],
-  creator: config.site.author,
-  metadataBase: new URL(config.site.url),
+  title: 'Joaquin Bressan',
+  description: 'Builder for the agent era. Building infrastructure for a web where AI agents are the users.',
+  authors: [{ name: 'Joaquin Bressan' }],
+  creator: 'Joaquin Bressan',
+  metadataBase: new URL('https://joaquinbressan.com'),
   openGraph: {
-    title: config.site.title,
-    description: config.site.description,
-    url: config.site.url,
-    siteName: config.site.title,
-    images: [
-      {
-        url: config.site.logo,
-        width: 500,
-        height: 500,
-        alt: `${config.site.author} Logo`,
-      },
-    ],
+    title: 'Joaquin Bressan',
+    description: 'Builder for the agent era. Building infrastructure for a web where AI agents are the users.',
+    url: 'https://joaquinbressan.com',
+    siteName: 'Joaquin Bressan',
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
-    card: 'summary_large_image',
-    title: config.site.title,
-    description: config.site.description,
-    images: [config.site.logo],
-    creator: '@joaquinbressan', // Update this with your actual Twitter handle
+    card: 'summary',
+    title: 'Joaquin Bressan',
+    description: 'Builder for the agent era.',
+    creator: '@joaquinbressann',
   },
   icons: {
-    icon: config.site.logo,
+    icon: '/favicon.png',
+  },
+  alternates: {
+    types: {
+      'text/markdown': '/api/info',
+    },
   },
 }
 
@@ -43,9 +36,40 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Joaquin Bressan',
+    url: 'https://joaquinbressan.com',
+    jobTitle: 'Co-Founder',
+    sameAs: [
+      'https://github.com/JoaquinBN',
+      'https://x.com/joaquinbressann',
+      'https://linkedin.com/in/joaquin-bressan',
+    ],
+  }
+
   return (
-    <html lang="en">
-      <body className="antialiased">{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var theme = localStorage.getItem('theme');
+                if (theme === 'dark' || theme === 'light') {
+                  document.documentElement.className = theme;
+                }
+              })();
+            `,
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body>{children}</body>
     </html>
   )
 }

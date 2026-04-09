@@ -1,299 +1,128 @@
-'use client'
+import Chat from '@/components/Chat'
+import ThemeToggle from '@/components/ThemeToggle'
+import CursorGlow from '@/components/CursorGlow'
 
-import { useState, useEffect, useCallback } from 'react'
-import Image from 'next/image'
-import TypingEffect from '@/components/TypingEffect'
-import ChatInterface from '@/components/ChatInterface'
-import DraggableGlassChat from '@/components/DraggableGlassChat'
-import SlideToUnlock from '@/components/SlideToUnlock'
-import MobileExperience from '@/components/MobileExperience'
-import { getPersonalInfo, getCurrentAge, getSiteConfig } from '@/lib/data'
+const PROJECTS = [
+  {
+    name: 'argue.fun',
+    tagline: 'Argumentation market for AI agents.',
+    description:
+      'One of the first. Agents debating on Base for real token stakes. Launched Feb 2026. Currently paused. The agent UX work was the win.',
+  },
+  {
+    name: 'The Tide',
+    tagline: 'Venice Biennale 2025.',
+    description:
+      'Conversational AI installation. Built the end-to-end pipeline: data ingestion, NLP, RAG, multilingual STT/LLM/TTS, real-time WebRTC. Youngest co-author in the Biennale\'s recorded history. 300K+ visitors.',
+  },
+  {
+    name: 'Weekn',
+    tagline: 'Ticketing. ~\u20AC100K GMV.',
+    description: 'Co-founded. MVP in under a month. Largest deploy: 3K daily attendees for a week.',
+  },
+] as const
 
-const personalInfo = getPersonalInfo()
-const config = getSiteConfig()
+const LINKS = [
+  { label: 'email', value: 'joaquinbressan@gmail.com', href: 'mailto:joaquinbressan@gmail.com' },
+  { label: 'x', value: '@joaquinbressann', href: 'https://x.com/joaquinbressann' },
+  { label: 'github', value: 'JoaquinBN', href: 'https://github.com/JoaquinBN' },
+  { label: 'linkedin', value: 'joaquin-bressan', href: 'https://linkedin.com/in/joaquin-bressan' },
+] as const
+
+function SectionLabel({ children }: { children: string }) {
+  return (
+    <p className="text-xs uppercase tracking-[0.2em]" style={{ color: 'var(--subtle)' }}>
+      {'// '}{children}
+    </p>
+  )
+}
 
 export default function Home() {
-  const [started, setStarted] = useState(false)
-  const [showSlideToUnlock, setShowSlideToUnlock] = useState(false)
-  const [showSlideButton, setShowSlideButton] = useState(false)
-  const [showSocialLogos, setShowSocialLogos] = useState(false)
-  const [showChat, setShowChat] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(true) // Default to expanded for better desktop experience
-  const [nameTypingComplete, setNameTypingComplete] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  const [showCopyToast, setShowCopyToast] = useState(false)
-  const [showMobileExperience, setShowMobileExperience] = useState(false)
-  const age = getCurrentAge()
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
-  const handleKeyPress = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Enter' && !started) {
-      setStarted(true)
-    }
-  }, [started])
-
-  const handleClick = () => {
-    if (!started) {
-      setStarted(true)
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress)
-    return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [started, handleKeyPress])
-
-  const handleNameTypingComplete = () => {
-    setNameTypingComplete(true)
-  }
-
-  const handleTypingComplete = () => {
-    setTimeout(() => {
-      setShowSlideToUnlock(true)
-      // Start slide button animation
-      setTimeout(() => {
-        setShowSlideButton(true)
-        // Start social logos animation after slide button appears
-        setTimeout(() => {
-          setShowSocialLogos(true)
-        }, 400) // Wait for slide button animation to complete
-      }, 100)
-    }, 300)
-  }
-
-  const handleSlideUnlock = () => {
-    if (isMobile) {
-      setShowMobileExperience(true)
-    } else {
-      setShowChat(true)
-    }
-  }
-
-  const handleEmailCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(personalInfo.contact.email)
-      setShowCopyToast(true)
-      setTimeout(() => {
-        setShowCopyToast(false)
-      }, 3000)
-    } catch (err) {
-      console.error('Failed to copy email:', err)
-    }
-  }
-
   return (
-    <main className="min-h-screen px-6">
-      <div className="max-w-lg w-full mx-auto">
-        {!started ? (
-          /* Initial view - Just name, age and press enter */
-          <div className="flex flex-col items-center justify-center min-h-screen">
-            <div className="mb-4">
-              <div className="text-lg md:text-3xl font-bold text-white mb-2">
-                <TypingEffect 
-                  text={`${personalInfo.name}, ${age}`}
-                  speed={config.ui.typingSpeed.name}
-                  delay={config.ui.delays.initial}
-                  onComplete={handleNameTypingComplete}
-                />
+    <main className="min-h-screen px-6 pt-24 pb-24 md:pt-32">
+      <div className="mx-auto max-w-xl">
+        <CursorGlow />
+        <ThemeToggle />
+
+        {/* Hero */}
+        <header className="flex items-center gap-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/avatar.png"
+            alt="Joaquin Bressan"
+            width={48}
+            height={48}
+            className="rounded-full shrink-0"
+            style={{ background: 'var(--bg)' }}
+          />
+          <div>
+            <h1 className="text-lg font-bold" style={{ color: 'var(--fg)' }}>
+              Joaquin Bressan
+            </h1>
+            <p className="text-sm" style={{ color: 'var(--muted)' }}>
+              I build for the agent era.
+            </p>
+          </div>
+        </header>
+
+        {/* Thesis */}
+        <p className="mt-6 text-sm leading-relaxed" style={{ color: 'var(--subtle)' }}>
+          The next billion users of the internet won&apos;t be human. They&apos;ll be agents, acting on behalf of humans, browsing, transacting, and making decisions at scale. Every layer of the web was built assuming a person on the other end. That assumption is about to break. I build the infrastructure for what comes after.
+        </p>
+
+        {/* Now */}
+        <section className="mt-12">
+          <SectionLabel>now</SectionLabel>
+          <p className="mt-3 text-sm" style={{ color: 'var(--muted)' }}>
+            Building infrastructure for the agent era. Exploring what identity and trust look like when AI agents are the users.
+          </p>
+        </section>
+
+        {/* Work */}
+        <section className="mt-12">
+          <SectionLabel>work</SectionLabel>
+          <div className="mt-3 space-y-5">
+            {PROJECTS.map((project) => (
+              <div key={project.name} className="hover-lift">
+                <p className="font-bold text-sm" style={{ color: 'var(--fg)' }}>
+                  {project.name}
+                </p>
+                <p className="text-sm" style={{ color: 'var(--muted)' }}>
+                  {project.tagline}
+                </p>
+                <p className="text-sm mt-0.5" style={{ color: 'var(--subtle)' }}>
+                  {project.description}
+                </p>
               </div>
-              {nameTypingComplete && (
-                <div 
-                  className="text-sm md:text-base text-gray-400 hover:text-gray-300 transition-colors cursor-pointer"
-                  onClick={handleEmailCopy}
-                >
-                  <TypingEffect 
-                    text={personalInfo.contact.email}
-                    speed={config.ui.typingSpeed.name}
-                    delay={200}
-                  />
-                </div>
-              )}
-            </div>
-            {nameTypingComplete && (
-              <div 
-                className="text-sm md:text-base text-gray-400 leading-relaxed cursor-pointer"
-                onClick={handleClick}
-              >
-                <span className="text-white">{'>'}</span>
-                <span className="ml-2 shimmer">
-                  {isMobile ? 'press here' : 'press enter'} 
-                  {!isMobile && (
-                    <span className="inline-flex items-center ml-2 px-2 py-1 rounded text-xl">
-                      ⏎
-                    </span>
-                  )}
+            ))}
+          </div>
+        </section>
+
+        {/* Links */}
+        <section className="mt-12">
+          <SectionLabel>links</SectionLabel>
+          <div className="mt-3 space-y-1">
+            {LINKS.map((link) => (
+              <div key={link.label} className="flex gap-4 text-sm hover-lift">
+                <span className="w-20 shrink-0" style={{ color: 'var(--subtle)' }}>
+                  {link.label}
                 </span>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="pt-16">
-            {/* Fixed name/age/email at top */}
-            <div className="text-center mb-6 md:mb-8">
-              <h1 className="text-lg md:text-3xl font-bold text-white mb-2">
-                {personalInfo.name}, {age}
-              </h1>
-              <div 
-                className="text-sm md:text-base text-gray-400 hover:text-gray-300 transition-colors cursor-pointer"
-                onClick={handleEmailCopy}
-              >
-                {personalInfo.contact.email}
-              </div>
-            </div>
-            
-            {/* About text flows from top to bottom */}
-            <div className="text-xs md:text-base text-gray-200 leading-relaxed whitespace-pre-line mb-6 md:mb-8">
-              <span className="text-white">{'>'}</span>
-              <span className="ml-2">
-                <TypingEffect 
-                  text={personalInfo.aboutText}
-                  speed={config.ui.typingSpeed.aboutText}
-                  delay={config.ui.delays.aboutText}
-                  onComplete={handleTypingComplete}
-                  allowSkip={config.ui.animations.enableSkip}
-                  allowTouchSkip={isMobile && config.ui.animations.allowTouchSkip}
-                  enableMarkdown={true}
-                />
-              </span>
-            </div>
-            
-            {/* Slide to unlock */}
-            {showSlideToUnlock && (
-              <>
-                <div 
-                  className={`transition-all duration-300 ${
-                    showSlideButton 
-                      ? 'opacity-100 transform translate-y-0' 
-                      : 'opacity-0 transform translate-y-4'
-                  }`}
-                  style={{ 
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                  }}
+                <a
+                  href={link.href}
+                  target={link.label === 'email' ? undefined : '_blank'}
+                  rel={link.label === 'email' ? undefined : 'noopener noreferrer'}
+                  className="link-hover"
                 >
-                  <SlideToUnlock 
-                    onUnlock={handleSlideUnlock} 
-                    isVisible={!showChat && !showMobileExperience}
-                    isMobile={isMobile}
-                  />
-                </div>
-                
-                {/* Social Media Links */}
-                <div className="mt-6 md:mt-8 flex justify-center items-center space-x-4 md:space-x-6">
-                  <a 
-                    href={personalInfo.contact.github} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={`text-gray-400 hover:text-white ${
-                      showSocialLogos 
-                        ? 'opacity-100 transform translate-y-0' 
-                        : 'opacity-0 transform translate-y-2'
-                    }`}
-                    style={{
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transitionDelay: showSocialLogos ? '0ms' : '0ms'
-                    }}
-                    aria-label="GitHub"
-                  >
-                    <Image src="/logos/social/github.svg" alt="GitHub" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
-                  </a>
-                  <a 
-                    href={personalInfo.contact.instagram} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={`text-gray-400 hover:text-white ${
-                      showSocialLogos 
-                        ? 'opacity-100 transform translate-y-0' 
-                        : 'opacity-0 transform translate-y-2'
-                    }`}
-                    style={{
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transitionDelay: showSocialLogos ? '100ms' : '0ms'
-                    }}
-                    aria-label="Instagram"
-                  >
-                    <Image src="/logos/social/instagram.svg" alt="Instagram" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
-                  </a>
-                  <a 
-                    href={personalInfo.contact.linkedin} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={`text-gray-400 hover:text-white ${
-                      showSocialLogos 
-                        ? 'opacity-100 transform translate-y-0' 
-                        : 'opacity-0 transform translate-y-2'
-                    }`}
-                    style={{
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transitionDelay: showSocialLogos ? '200ms' : '0ms'
-                    }}
-                    aria-label="LinkedIn"
-                  >
-                    <Image src="/logos/social/linkedin.svg" alt="LinkedIn" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
-                  </a>
-                  <a 
-                    href={personalInfo.contact.twitter} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={`text-gray-400 hover:text-white ${
-                      showSocialLogos 
-                        ? 'opacity-100 transform translate-y-0' 
-                        : 'opacity-0 transform translate-y-2'
-                    }`}
-                    style={{
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transitionDelay: showSocialLogos ? '300ms' : '0ms'
-                    }}
-                    aria-label="Twitter"
-                  >
-                    <Image src="/logos/social/twitter.svg" alt="Twitter" width={28} height={28} className="w-6 h-6 md:w-7 md:h-7" />
-                  </a>
-                </div>
-              </>
-            )}
+                  {link.value}
+                </a>
+              </div>
+            ))}
           </div>
-        )}
+        </section>
       </div>
 
-      {/* Draggable Chat Interface - Desktop */}
-      {showChat && !isMobile && (
-        <DraggableGlassChat 
-          onClose={() => setShowChat(false)}
-          isExpanded={isExpanded}
-          onToggleExpand={() => setIsExpanded(!isExpanded)}
-        >
-          <ChatInterface isExpanded={isExpanded} />
-        </DraggableGlassChat>
-      )}
-
-      {/* Mobile Experience */}
-      {showMobileExperience && isMobile && (
-        <MobileExperience 
-          onClose={() => setShowMobileExperience(false)}
-        />
-      )}
-
-      {/* Copy Toast Notification */}
-      {showCopyToast && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in">
-          <div className="bg-black/20 backdrop-blur-md border border-white/10 rounded-lg px-4 py-3 shadow-lg">
-            <div className="flex items-center space-x-2">
-              <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              <span className="text-sm text-white font-medium">Copied</span>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Chat overlay (global, not a section) */}
+      <Chat />
     </main>
   )
 }

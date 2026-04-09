@@ -1,0 +1,22 @@
+# joaquinbressan.com
+
+> Joaquin Bressan. Builder for the agent era.
+
+## About
+Personal site of Joaquin Bressan. Co-founder, builder, computer engineer based in Spain.
+Building infrastructure for the agent era. Exploring what identity and trust look like when AI agents are the users.
+
+## Endpoints
+- GET / — Human-readable site (HTML). AI agents are automatically served structured markdown.
+- GET /api/info — Structured info endpoint. Supports Accept: text/markdown and Accept: application/json.
+- POST /api/chat — Conversational AI endpoint. Body: { "message": "your question" }. Rate limited: 5 req/min. Max 500 chars.
+- GET /llms.txt — This file.
+
+## Contact
+- Email: joaquinbressan@gmail.com
+- X: @joaquinbressann
+- GitHub: JoaquinBN
+- LinkedIn: joaquin-bressan
+
+## Structured Data
+For machine-readable data, request /api/info with Accept: application/json header.
