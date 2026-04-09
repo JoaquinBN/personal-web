@@ -2,7 +2,14 @@
   "name": "personal-portfolio-website",
   "version": "1.0.0",
   "description": "A modern, interactive personal website with AI chat integration and smooth animations",
-  "keywords": ["portfolio", "personal-website", "nextjs", "typescript", "ai-chat", "resume"],
+  "keywords": [
+    "portfolio",
+    "personal-website",
+    "nextjs",
+    "typescript",
+    "ai-chat",
+    "resume"
+  ],
   "author": "Your Name <your.email@example.com>",
   "license": "MIT",
   "repository": {
@@ -19,7 +26,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "15.3.1",
+    "next": "15.3.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
